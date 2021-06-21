@@ -1,0 +1,10 @@
+{
+  "name": "Liste aller bekannten Söhne/Töchter des Rick Erich",
+  "short_name": "Erichs Kinderliste",
+  "description": "Verfolge Erichs Leben hier: https://www.twitch.tv/rickymainia",
+  "lang": "de-DE",
+  "start_url": "/erich",
+  "display": "standalone",
+  "theme_color": "#2db6ad",
+  "background_color": "#45bcb6"
+}

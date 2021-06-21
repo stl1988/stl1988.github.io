@@ -1,0 +1,15 @@
+{
+  "name": "Web App Test 2",
+  "short_name": "webapp2",
+  "lang": "de",
+  "start_url": "/webapp-test2",
+  "display": "fullscreen",
+  "theme_color": "#00ff00",
+  "icons": [
+    {
+      "src": "/webapp-test2/00ff00.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
