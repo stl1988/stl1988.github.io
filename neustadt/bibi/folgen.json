@@ -1,6 +1,11 @@
 {
 "folge": [
-{"id":1, "titel":"Hexen gibt es doch", "release":"04.08.1980", "buch":"Elfie Donnelly", "cover":[],"misc":"Ursprünglich erschienen als \"Können Blocksbergs hexen?\" unter dem Label Eene Meene Hexerei"},
-  {"id":2, "titel":"Hexerei in der Schule", "release":"31.12.1980", "buch":"Elfie Donnelly", "cover":[],"misc":"Ursprünglich erschienen als \"Bibi und der Hexenspruch\" unter dem Label Eene Meene Hexerei"}
+{"id":1, "titel":"Hexen gibt es doch", "release":"04.08.1980", "buch":"Elfie Donnelly", "regie":"Ulli Herzog", "ton":"Carsten T. Brüse", "cover":[],"misc":"Ursprünglich erschienen als \"Können Blocksbergs hexen?\" unter dem Label Eene Meene Hexerei"},
+  {"id":2, "titel":"Hexerei in der Schule", "release":"31.12.1980", "buch":"Elfie Donnelly", "regie":"Ulli Herzog", "ton":"Carsten T. Brüse", "cover":[],"misc":"Ursprünglich erschienen als \"Bibi und der Hexenspruch\" unter dem Label Eene Meene Hexerei"},
+  {"id":3, "titel":"Die Zauberlimonade", "release":"31.12.1980", "buch":"Elfie Donnelly", "regie":"Ulli Herzog", "ton":"Walter Scheerbarth", "cover":[],"misc":"Ursprünglich erschienen als \"Bibi und die Zauberlimonade\" unter dem Label Eene Meene Hexerei"},
+  {"id":4, "titel":"Der Bankräuber", "release":"31.12.1980", "buch":"Elfie Donnelly", "regie":"Ulli Herzog", "ton":"Walter Scheerbarth", "cover":[],"misc":"Ursprünglich erschienen als \"Bibi und der Bankräuber\" unter dem Label Eene Meene Hexerei"},
+  {"id":5, "titel":"Ein verhexter Urlaub", "release":"31.12.1980", "buch":"Elfie Donnelly", "regie":"Ulli Herzog", "ton":"Eberhard Sengpiel", "cover":[],"misc":"Ursprünglich erschienen unter dem Label Eene Meene Hexerei"},
+  {"id":6, "titel":"Die Kuh im Schlafzimmer", "release":"01.01.1982", "buch":"Elfie Donnelly", "regie":"Ulli Herzog", "ton":"Eberhard Sengpiel", "cover":[],"misc":"Ursprünglich erschienen unter dem Label Eene Meene Hexerei"},
+  {"id":7, "titel":"heilt den Bürgermeister", "release":"01.01.1982", "buch":"Elfie Donnelly", "regie":"Ulli Herzog", "ton":"Walter Scheerbarth", "cover":[],"misc":"Ursprünglich erschienen als \"Bibi heilt den Bürgermeister\" unter dem Label Eene Meene Hexerei"}
 ]
 }
