@@ -6,6 +6,7 @@
   {"id":4, "titel":"Der Bankräuber", "release":"31.12.1980", "buch":"Elfie Donnelly", "regie":"Ulli Herzog", "ton":"Walter Scheerbarth", "cover":[],"misc":"Ursprünglich erschienen als \"Bibi und der Bankräuber\" unter dem Label Eene Meene Hexerei"},
   {"id":5, "titel":"Ein verhexter Urlaub", "release":"31.12.1980", "buch":"Elfie Donnelly", "regie":"Ulli Herzog", "ton":"Eberhard Sengpiel", "cover":[],"misc":"Ursprünglich erschienen unter dem Label Eene Meene Hexerei"},
   {"id":6, "titel":"Die Kuh im Schlafzimmer", "release":"01.01.1982", "buch":"Elfie Donnelly", "regie":"Ulli Herzog", "ton":"Eberhard Sengpiel", "cover":[],"misc":"Ursprünglich erschienen unter dem Label Eene Meene Hexerei"},
-  {"id":7, "titel":"heilt den Bürgermeister", "release":"01.01.1982", "buch":"Elfie Donnelly", "regie":"Ulli Herzog", "ton":"Walter Scheerbarth", "cover":[],"misc":"Ursprünglich erschienen als \"Bibi heilt den Bürgermeister\" unter dem Label Eene Meene Hexerei"}
+  {"id":7, "titel":"heilt den Bürgermeister", "release":"01.01.1982", "buch":"Elfie Donnelly", "regie":"Ulli Herzog", "ton":"Walter Scheerbarth", "cover":[],"misc":"Ursprünglich erschienen als \"Bibi heilt den Bürgermeister\" unter dem Label Eene Meene Hexerei"},
+  {"id":8, "titel":"Die Schlossgespenster", "release":"01.01.1983", "buch":"Elfie Donnelly", "regie":"Ulli Herzog", "ton":"Walter Scheerbarth", "cover":[],"misc":"Erste Folge unter dem Label Bibi Blocksberg"}
 ]
 }
