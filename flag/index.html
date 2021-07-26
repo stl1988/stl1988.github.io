@@ -1,0 +1,122 @@
+<html>
+	<head>
+		<title>Flag Generator Fork</title>
+		
+		<script type="text/javascript">
+		
+			function doThis()
+			{
+				var scene = document.getElementById("textInput").value; //gets what's in the box
+				var specColor = ""; //this is the buffer for each color
+				var i; //this is for the for-loop taking care of each letter in the input
+				var j = 1; //this is used to test when to save a color
+				var tempStr;
+				var numCount;
+				var largeBlock = "";
+				var totalSVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"480\" height=\"288\">";					
+				for(i = 0; i < scene.length; i++)
+				{
+					numCount = scene.charCodeAt(i);
+					tempStr = numCount.toString(16);
+					if(tempStr.length % 2 != 0)
+					{
+						tempStr = "0"+ tempStr;
+					}
+					largeBlock = largeBlock + tempStr;
+				}
+				var width = 480 / Math.floor(largeBlock.length/6);
+				document.getElementById("textOutput").innerHTML = "As one number:</br>#"+largeBlock;
+				for(i = 0; i < largeBlock.length; i++)
+				{
+					specColor += largeBlock.charAt(i);
+					if(i==j*6-1)
+					{
+						totalSVG += "<rect fill=\"#"+specColor+"\" width=\""+width+"\" height=\"288\" x=\""+(width*(j-1))+"\"/>";
+						j = j + 1;
+						specColor = "";
+					}
+				}
+				if(!(specColor===""))
+				{
+					totalSVG+="<text font-size=\"32\" fill=\"white\" font-family=\"Bitstream Vera Sans\" x=\"360\" y=\"269.3\">+<tspan font-size=\"48\">"+ specColor +"</tspan></text>";
+				}
+				totalSVG = totalSVG + "</svg>";
+				document.getElementById("picture").innerHTML = totalSVG;
+			}
+      
+      function doThisWith(flag)
+			{
+				var scene = flag; //gets what's in the box
+				var specColor = ""; //this is the buffer for each color
+				var i; //this is for the for-loop taking care of each letter in the input
+				var j = 1; //this is used to test when to save a color
+				var tempStr;
+				var numCount;
+				var largeBlock = "";
+				var totalSVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"480\" height=\"288\">";					
+				for(i = 0; i < scene.length; i++)
+				{
+					numCount = scene.charCodeAt(i);
+					tempStr = numCount.toString(16);
+					if(tempStr.length % 2 != 0)
+					{
+						tempStr = "0"+ tempStr;
+					}
+					largeBlock = largeBlock + tempStr;
+				}
+				var width = 480 / Math.floor(largeBlock.length/6);
+				document.getElementById("textOutput").innerHTML = "As one number:</br>#"+largeBlock;
+				for(i = 0; i < largeBlock.length; i++)
+				{
+					specColor += largeBlock.charAt(i);
+					if(i==j*6-1)
+					{
+						totalSVG += "<rect fill=\"#"+specColor+"\" width=\""+width+"\" height=\"288\" x=\""+(width*(j-1))+"\"/>";
+						j = j + 1;
+						specColor = "";
+					}
+				}
+				if(!(specColor===""))
+				{
+					totalSVG+="<text font-size=\"32\" fill=\"white\" font-family=\"Bitstream Vera Sans\" x=\"360\" y=\"269.3\">+<tspan font-size=\"48\">"+ specColor +"</tspan></text>";
+				}
+				totalSVG = totalSVG + "</svg>";
+				document.getElementById("picture").innerHTML = totalSVG;
+			}
+		</script>
+
+		<style>
+			#wrapper{width: 650px; margin: 0px auto;}
+			body{background-color: #ededed;}
+		</style>
+	</head>
+
+	<body>
+		<div id="wrapper">
+        	<div id="content">
+        		<div id="picture" align="center">
+					<svg xmlns="http://www.w3.org/2000/svg" width="480" height="288">
+						<rect fill="#09f911" width="96" height="288"/>
+						<rect fill="#029d74" width="96" height="288" x="96"/>
+						<rect fill="#e35bd8" width="96" height="288" x="192"/>
+						<rect fill="#4156c5" width="96" height="288" x="288"/>
+						<rect fill="#635688" width="96" height="288" x="384"/>
+						<text font-size="32" fill="white" font-family="Bitstream Vera Sans" x="388.1" y="269.3">+<tspan font-size="48">C0</tspan></text>
+					</svg>
+                </div>
+                
+                
+            </div>
+				<center>
+					</br>
+					<input type="text" id="textInput" />
+					</br></br>
+					<input type="button" id="choice1" value=" Encode " onClick="doThis();">
+					</br></br>
+					<div id="textOutput"><a href="https://en.wikipedia.org/wiki/Free_Speech_Flag">The AACS Free Speech Flag</a></br>#09F911029D74E35BD84156C5635688C0</div>
+					</br>
+					<b>What is this site?</b></br>All data can be converted to pure numbers, such as algorithms, music, or in this case, text. From there, the numbers can be converted into hexadecimal colors, and made into a flag.</br>Freedom of Speech flags are created as a type of vexillilogical steganography (or, hidden meanings in flags). Originally made in 2007 as a protest of the absurdity to the outlawing of the key to the AACS encryption algorithm, the first Freedom of Speech flag has since inspired other group to make flags out of these 'illegal numbers'.
+				</center>
+		</div>
+	</body>
+</html>
