@@ -83,6 +83,46 @@
 				totalSVG = totalSVG + "</svg>";
 				document.getElementById("picture").innerHTML = totalSVG;
 			}
+			
+			function doThisTest()
+			{
+				var scene = document.getElementById("textInput"); //gets what's in the box
+				var specColor = ""; //this is the buffer for each color
+				var i; //this is for the for-loop taking care of each letter in the input
+				var j = 1; //this is used to test when to save a color
+				var tempStr;
+				var numCount;
+				var largeBlock = "";
+				var totalSVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"480\" height=\"288\">";					
+				for(i = 0; i < scene.length; i++)
+				{
+					numCount = scene.charCodeAt(i);
+					tempStr = numCount.toString(16);
+					if(tempStr.length % 2 != 0)
+					{
+						tempStr = "0"+ tempStr;
+					}
+					largeBlock = largeBlock + tempStr;
+				}
+				var width = 480 / Math.floor(largeBlock.length/6);
+				document.getElementById("textOutput").innerHTML = "As one number:</br>#"+largeBlock;
+				for(i = 0; i < largeBlock.length; i++)
+				{
+					specColor += largeBlock.charAt(i);
+					if(i==j*6-1)
+					{
+						totalSVG += "<rect fill=\"#"+specColor+"\" width=\""+width+"\" height=\"288\" x=\""+(width*(j-1))+"\"/>";
+						j = j + 1;
+						specColor = "";
+					}
+				}
+				if(!(specColor===""))
+				{
+					totalSVG+="<text font-size=\"32\" fill=\"white\" font-family=\"Bitstream Vera Sans\" x=\"360\" y=\"269.3\">+<tspan font-size=\"48\">"+ specColor +"</tspan></text>";
+				}
+				totalSVG = totalSVG + "</svg>";
+				document.getElementById("picture").innerHTML = totalSVG;
+			}
 		</script>
 
 		<style>
@@ -112,6 +152,7 @@
 					<input type="text" id="textInput" />
 					</br></br>
 					<input type="button" id="choice1" value=" Encode " onClick="doThis();">
+					<input type="button" id="choice1" value=" Encode test" onClick="doThisTest();">
 					</br></br>
 					<div id="textOutput"><a href="https://en.wikipedia.org/wiki/Free_Speech_Flag">The AACS Free Speech Flag</a></br>#09F911029D74E35BD84156C5635688C0</div>
 					</br>
