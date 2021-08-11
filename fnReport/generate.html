@@ -32,16 +32,16 @@
 		// ------------------------------------
 
 		var datum=date.getTime()/1000;
-		var fnbr = JSON.parse(httpGet2("https://fortniteapi.io/news?lang=de&type=br","Authorization",apikey));
-		var fnstw = JSON.parse(httpGet2("https://fortniteapi.io/news?lang=de&type=stw","Authorization",apikey));
-		var fncreative = JSON.parse(httpGet2("https://fortniteapi.io/news?lang=de&type=creative","Authorization",apikey));
-		var fnuser = JSON.parse(httpGet2("https://fortniteapi.io/lookup?username="+pvar,"Authorization",apikey));
+		var fnbr = JSON.parse(httpGet2("https://fortniteapi.io/v1/news?lang="+pvar2+"&type=br","Authorization",apikey));
+		var fnstw = JSON.parse(httpGet2("https://fortniteapi.io/v1/news?lang="+pvar2+"&type=stw","Authorization",apikey));
+		var fncreative = JSON.parse(httpGet2("https://fortniteapi.io/v1/news?lang="+pvar2+"&type=creative","Authorization",apikey));
+		var fnuser = JSON.parse(httpGet2("https://fortniteapi.io/v1/lookup?username="+pvar1,"Authorization",apikey));
 		if(fnuser.result=true) {
-		var fnmatches= JSON.parse(httpGet2("https://fortniteapi.io/matches?account="+fnuser.account_id,"Authorization",apikey));
-		var fnstats= JSON.parse(httpGet2("https://fortniteapi.io/stats?account="+fnuser.account_id,"Authorization",apikey));
+		var fnmatches= JSON.parse(httpGet2("https://fortniteapi.io/v1/matches?account="+fnuser.account_id,"Authorization",apikey));
+		var fnstats= JSON.parse(httpGet2("https://fortniteapi.io/v1/stats?account="+fnuser.account_id,"Authorization",apikey));
                 }
-		var fnshop= JSON.parse(httpGet2("https://fortniteapi.io/shop?lang=de","Authorization",apikey));
-		var fnchallenges = JSON.parse(httpGet2("https://fortniteapi.io/challenges?season=current&lang=de","Authorization",apikey));
+		var fnshop= JSON.parse(httpGet2("https://fortniteapi.io/v1/shop?lang="+pvar2,"Authorization",apikey));
+		var fnchallenges = JSON.parse(httpGet2("https://fortniteapi.io/v1/challenges?season=current&lang"+pvar2,"Authorization",apikey));
 		
 		
 		
@@ -121,7 +121,7 @@ console.log("cover, toc, br news");
 		
 		// toc
 		{toc: {
-		title: {text: "Inhaltsverzeichnis", fontSize: 30},
+		title: {text: "Contents", fontSize: 30},
 		numberStyle: {bold: true}
 		}, pageBreak: 'before'
 		},
@@ -229,7 +229,7 @@ console.log("cover, toc, br news");
 		if(bildurl!="") {
 		inhalt.push( {qr: bildurl, fit: 200} );
 		} else {
-		inhalt.push( {text: "(Konnte kein Bild oder QR-Code erstellen)"} );
+		inhalt.push( {text: "(Couldn't create image or QR code)"} );
 		}
 		}
 		
@@ -247,7 +247,7 @@ console.log("cover, toc, br news");
 		var karte=httpGet("https://helloacm.com/api/image-to-base64/?url=https://media.fortniteapi.io/images/map.png?showPOI=true");
 		console.log(karte);
 		inhalt.push(
-		{text: "Aktuelle Karte (Battle Royale)", pageBreak: 'before', fontSize: 30, alignment: 'center', tocItem: true},
+		{text: "Current map (Battle Royale)", pageBreak: 'before', fontSize: 30, alignment: 'center', tocItem: true},
 		{text: " "},
 		{image: karte, width: 500, alignment: 'center'}
 		);
@@ -256,7 +256,7 @@ console.log("cover, toc, br news");
 		if(fnuser.result=true) {
 		console.log("matches");
 		inhalt.push(
-		{text: "Zuletzt gespielt", fontSize: 30, pageBreak: 'before', alignment: 'center', tocItem: true},
+		{text: "Last played", fontSize: 30, pageBreak: 'before', alignment: 'center', tocItem: true},
 		{text: " "}
 		);
 		for(i=0;i<fnmatches.matches.length;i++) {
@@ -264,10 +264,10 @@ console.log("cover, toc, br news");
 		{text: fnmatches.matches[i].readable_name, fontSize: 20},
 		{text: fnmatches.matches[i].mode+" "+fnmatches.matches[i].platform},
 		{text: fnmatches.matches[i].date},
-		{text: fnmatches.matches[i].matchesplayed+" Mal gespielt"},
-		{text: fnmatches.matches[i].minutesplayed+" Minuten gespielt"},
-		{text: fnmatches.matches[i].kills+" Kills"},
-		{text: fnmatches.matches[i].playersoutlived+" Gegner \u00fcberlebt"},
+		{text: fnmatches.matches[i].matchesplayed+" times"},
+		{text: fnmatches.matches[i].minutesplayed+" minutes"},
+		{text: fnmatches.matches[i].kills+" kills"},
+		{text: fnmatches.matches[i].playersoutlived+" outlived"},
 		{text: "Score: "+fnmatches.matches[i].score},
 		{text: " "}
 		
@@ -297,19 +297,19 @@ console.log("cover, toc, br news");
 		if(bildurl!="") {
 		inhalt.push( {qr: bildurl, fit: 200} );
 		} else {
-		inhalt.push( {text: "(Konnte kein Bild oder QR-Code erstellen)"} );
+		inhalt.push( {text: "(Couldn't create image or QR code)"} );
 		}
 		}
 		inhalt.push(
 		{text: fnshop.featured[i].description},
 		{text: " "},
 		{text: "Release: "+fnshop.featured[i].releaseDate},
-		{text: "Zuletzt gesehen: "+fnshop.featured[i].lastAppearance},
-		{text: "Seltenheit: "+fnshop.featured[i].rarity+" ("+fnshop.featured[i].internalRarity+")"},
-		{text: "Kaufbar: "+fnshop.featured[i].buyAllowed+", als Geschenk: "+fnshop.featured[i].giftAllowed},
-		{text: "Preis: "+fnshop.featured[i].price+" VBucks ("+fnshop.featured[i].priceNoDiscount+" VBucks)"},
+		{text: "Last seen: "+fnshop.featured[i].lastAppearance},
+		{text: "Rarity: "+fnshop.featured[i].rarity+" ("+fnshop.featured[i].internalRarity+")"},
+		{text: "Can purchase: "+fnshop.featured[i].buyAllowed+", als Geschenk: "+fnshop.featured[i].giftAllowed},
+		{text: "Price: "+fnshop.featured[i].price+" VBucks ("+fnshop.featured[i].priceNoDiscount+" VBucks)"},
 		{text: "Banner: "+fnshop.featured[i].banner},
-		{text: "Enthalten: "},
+		{text: "Contains: "},
 		{text: " "}
 		);
 		for(j=0;j<fnshop.featured[i].otherItemsDetails.length;j++) {
@@ -327,7 +327,7 @@ console.log("cover, toc, br news");
 		if(bildurl!="") {
 		inhalt.push( {qr: bildurl, fit: 150} );
 		} else {
-		inhalt.push( {text: "(Konnte kein Bild oder QR-Code erstellen)"} );
+		inhalt.push( {text: "(Couldn't create image or QR code)"} );
 		}
 		}
 		inhalt.push(
@@ -349,7 +349,7 @@ console.log("cover, toc, br news");
 		console.log(weekly);
 		
 		inhalt.push(
-		{text: "Wochen-Herausforderungen", fontSize: 30, alignment: 'center', pageBreak: 'before', tocItem: true},
+		{text: "Weekly challenges", fontSize: 30, alignment: 'center', pageBreak: 'before', tocItem: true},
 		{text: " "}
 		);
 		
@@ -427,9 +427,9 @@ console.log("cover, toc, br news");
 		};
 
 		
-		console.log("PDF wird erstellt...");
+		console.log("Creating PDF...");
 		pdfMake.createPdf(docDefinition).download("fnReport-"+datum+"-"+pvar+"-de.pdf");
-		console.log("Fertig.");
+		console.log("Done.");
 	</script>
 	
 	</body>
