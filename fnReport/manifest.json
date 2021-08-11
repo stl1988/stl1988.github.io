@@ -1,0 +1,8 @@
+{
+  "name": "fnReport",
+  "short_name": "fnReport",
+  "lang": "de-DE",
+  "start_url": "/fnReport/index.html",
+  "display": "standalone",
+  "theme_color": "#007f00"
+}
