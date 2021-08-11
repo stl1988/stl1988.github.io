@@ -1,0 +1,436 @@
+<html>
+<head>
+	<!-- Scriptquellen hier -->
+<script src="time.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+<script src="http.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/pdfmake.min.js" integrity="sha512-Yf733gmgLgGUo+VfWq4r5HAEaxftvuTes86bKvwTpqOY3oH0hHKtX/9FfKYUcpaxeBJxeXvcN4EY3J6fnmc9cA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/vfs_fonts.js" integrity="sha512-cktKDgjEiIkPVHYbn8bh/FEyYxmt4JDJJjOCu5/FQAkW4bc911XtKYValiyzBiJigjVEvrIAyQFEbRJZyDA1wQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	
+<!--
+<script src="//cdn.jsdelivr.net/npm/eruda"></script>
+<script>eruda.init();</script>
+-->
+
+</head>
+
+
+<body>
+	<script type="text/javascript" charset="utf-8">
+	const urlParams = new URLSearchParams(window.location.search);
+		const pvar1 = urlParams.get('user');
+    const pvar2 = urlParams.get('lang');
+    const pvar3 = urlParams.get('key');
+		alert("user "+pvar1+", language "+pvar2+", API-key "+pvar3);
+		
+		// Put your fortniteapi.io API key here
+		var apikey = pvar3;
+		// ------------------------------------
+
+		var datum=date.getTime()/1000;
+		var fnbr = JSON.parse(httpGet2("https://fortniteapi.io/news?lang=de&type=br","Authorization",apikey));
+		var fnstw = JSON.parse(httpGet2("https://fortniteapi.io/news?lang=de&type=stw","Authorization",apikey));
+		var fncreative = JSON.parse(httpGet2("https://fortniteapi.io/news?lang=de&type=creative","Authorization",apikey));
+		var fnuser = JSON.parse(httpGet2("https://fortniteapi.io/lookup?username="+pvar,"Authorization",apikey));
+		if(fnuser.result=true) {
+		var fnmatches= JSON.parse(httpGet2("https://fortniteapi.io/matches?account="+fnuser.account_id,"Authorization",apikey));
+		var fnstats= JSON.parse(httpGet2("https://fortniteapi.io/stats?account="+fnuser.account_id,"Authorization",apikey));
+                }
+		var fnshop= JSON.parse(httpGet2("https://fortniteapi.io/shop?lang=de","Authorization",apikey));
+		var fnchallenges = JSON.parse(httpGet2("https://fortniteapi.io/challenges?season=current&lang=de","Authorization",apikey));
+		
+		
+		
+// Cover
+console.log("cover, toc, br news");
+		var inhalt = [
+		
+		{text: "fnReport", fontSize: 75}
+		];
+		if(fnuser.result=true) {
+		inhalt.push({text: datum+" - "+timeConverter(datum)+" - "+pvar+" - "+fnuser.account_id+" - de", alignment: 'center'});
+		} else {
+		inhalt.push({text: datum+" - "+timeConverter(datum)+" - "+pvar+" - "+fnuser.error+" - de", alignment: 'center'});
+		}
+		
+		
+		var farbe1='#'+('00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6);
+		console.log(farbe1);
+		var farbe2='#'+('00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6);
+		console.log(farbe2);
+		var farbe3='#'+('00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6);
+		console.log(farbe3);
+		
+		var bildurl1=fnbr.news[0].image;
+		var bild1=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl1);
+		console.log(bildurl1);
+		console.log(bild1);
+		var bildurl2=fnbr.news[1].image;
+		var bild2=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl2);
+		console.log(bildurl2);
+		console.log(bild2);
+		var bildurl3=fnstw.news[0].image;
+		var bild3=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl3); 
+		console.log(bildurl3);
+		console.log(bild3);
+		var bildurl4=fnstw.news[1].image;
+		var bild4=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl4);
+		console.log(bildurl4);
+		console.log(bild4);
+		var bildurl5=fnshop.featured[0].icon;
+		var bild5=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl5);
+		console.log(bildurl5);
+		console.log(bild5);
+		var bildurl6=fnshop.featured[1].icon;
+		var bild6=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl6);
+		console.log(bildurl6);
+		console.log(bild6);
+		
+		inhalt.push(
+		{text: "Made with fortniteapi.io", alignment: 'center'},
+		{text: "______________________________________________________________________________________", alignment: 'center'},
+		{text: " "},
+		{text: " "},
+		
+		{layout: 'noBorders', alignment: 'center',
+		table: {
+		widths: [250,250],
+		body: [
+		[
+		{image: bild1, fillColor: farbe1, width: 245, alignment: 'center'},
+		{image: bild2, fillColor: farbe1, width: 245, alignment: 'center'}
+		],
+		[
+		{image: bild3, fillColor: farbe2, width: 245, alignment: 'center'},
+		{image: bild4, fillColor: farbe2, width: 245, alignment: 'center'}
+		],
+		[
+		{image: bild5, fillColor: farbe3, width: 245, alignment: 'center'},
+		{image: bild6, fillColor: farbe3, width: 245, alignment: 'center'}
+		]
+		
+		]
+		
+		}
+		},
+		
+		
+		// toc
+		{toc: {
+		title: {text: "Inhaltsverzeichnis", fontSize: 30},
+		numberStyle: {bold: true}
+		}, pageBreak: 'before'
+		},
+		
+		
+		
+		{text: " "},
+		{text: "Battle Royale News", fontSize: 30, alignment: 'center', pageBreak: 'before', tocItem: true},
+		{text: " "}
+		);
+		
+
+		
+		for(i=0;i<fnbr.news.length;i++) {
+		var bildurl=fnbr.news[i].image;
+		var bild=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl);
+		console.log(bildurl);
+		console.log(bild);
+		inhalt.push(
+		{text: fnbr.news[i].title, fontSize: 20},
+		{text: fnbr.news[i].date+", aktuell: "+fnbr.news[i].live+", AdSpace: "+fnbr.news[i].adspace},
+		{text: " "}
+		);
+		
+		if(bild!="") {
+		inhalt.push( {image: bild, width: 200} );
+		} else {
+		if(bildurl!="") {
+		inhalt.push( {qr: bildurl, fit: 200} );
+		} else {
+		inhalt.push( {text: "(Konnte kein Bild oder QR-Code erstellen)"} );
+		}
+		}
+		
+		inhalt.push(
+		{text: " "},
+		{text: fnbr.news[i].body},
+		{text: "______________________________"},
+		{text: " "}
+		);
+		
+		}
+		
+		
+		// stw news
+		console.log("stw news");
+		inhalt.push(
+		{text: " "},
+		{text: "Save The World News", fontSize: 30, alignment: 'center', pageBreak: 'before', tocItem: true},
+		{text: " "}
+		);
+		
+		for(i=0;i<fnstw.news.length;i++) {
+		var bildurl=fnstw.news[i].image;
+		var bild=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl);
+		console.log(bildurl);
+		console.log(bild);
+		inhalt.push(
+		{text: fnstw.news[i].title, fontSize: 20},
+		{text: fnstw.news[i].date+", aktuell: "+fnstw.news[i].live+", AdSpace: "+fnstw.news[i].adspace},
+		{text: " "}
+		);
+		
+		if(bild!="") {
+		inhalt.push( {image: bild, width: 200} );
+		} else {
+		if(bildurl!="") {
+		inhalt.push( {qr: bildurl, fit: 200} );
+		} else {
+		inhalt.push( {text: "(Konnte kein Bild oder QR-Code erstellen)"} );
+		}
+		}
+		
+		inhalt.push(
+		{text: " "},
+		{text: fnstw.news[i].body},
+		{text: "______________________________"},
+		{text: " "}
+		);
+		
+		}
+
+                // creative news
+		console.log("creative news");
+		inhalt.push(
+		{text: " "},
+		{text: "Creative Mode News", fontSize: 30, alignment: 'center', pageBreak: 'before', tocItem: true},
+		{text: " "}
+		);
+		
+		for(i=0;i<fncreative.news.length;i++) {
+		var bildurl=fncreative.news[i].image;
+		var bild=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl);
+		console.log(bildurl);
+		console.log(bild);
+		inhalt.push(
+		{text: fncreative.news[i].title, fontSize: 20},
+		{text: fncreative.news[i].date+", aktuell: "+fncreative.news[i].live+", AdSpace: "+fncreative.news[i].adspace},
+		{text: " "}
+		);
+		
+		if(bild!="") {
+		inhalt.push( {image: bild, width: 200} );
+		} else {
+		if(bildurl!="") {
+		inhalt.push( {qr: bildurl, fit: 200} );
+		} else {
+		inhalt.push( {text: "(Konnte kein Bild oder QR-Code erstellen)"} );
+		}
+		}
+		
+		inhalt.push(
+		{text: " "},
+		{text: fncreative.news[i].body},
+		{text: "______________________________"},
+		{text: " "}
+		);
+		
+		}
+
+		// map
+		console.log("map");
+		var karte=httpGet("https://helloacm.com/api/image-to-base64/?url=https://media.fortniteapi.io/images/map.png?showPOI=true");
+		console.log(karte);
+		inhalt.push(
+		{text: "Aktuelle Karte (Battle Royale)", pageBreak: 'before', fontSize: 30, alignment: 'center', tocItem: true},
+		{text: " "},
+		{image: karte, width: 500, alignment: 'center'}
+		);
+		
+		//matches
+		if(fnuser.result=true) {
+		console.log("matches");
+		inhalt.push(
+		{text: "Zuletzt gespielt", fontSize: 30, pageBreak: 'before', alignment: 'center', tocItem: true},
+		{text: " "}
+		);
+		for(i=0;i<fnmatches.matches.length;i++) {
+		inhalt.push(
+		{text: fnmatches.matches[i].readable_name, fontSize: 20},
+		{text: fnmatches.matches[i].mode+" "+fnmatches.matches[i].platform},
+		{text: fnmatches.matches[i].date},
+		{text: fnmatches.matches[i].matchesplayed+" Mal gespielt"},
+		{text: fnmatches.matches[i].minutesplayed+" Minuten gespielt"},
+		{text: fnmatches.matches[i].kills+" Kills"},
+		{text: fnmatches.matches[i].playersoutlived+" Gegner \u00fcberlebt"},
+		{text: "Score: "+fnmatches.matches[i].score},
+		{text: " "}
+		
+		)
+		}
+		
+		
+		}
+		// shop
+		console.log("shop");
+		inhalt.push(
+		{text: "Daily Shop", alignment: 'center', pageBreak: 'before', fontSize: 30, tocItem: true},
+		{text: " "}
+		);
+		for(i=0;i<fnshop.featured.length;i++) {
+		var bildurl=fnshop.featured[i].icon;
+		var bild=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl);
+		console.log(bildurl);
+		console.log(bild);
+		inhalt.push(
+		{text: fnshop.featured[i].name, fontSize: 20},
+		{text: fnshop.featured[i].id}
+		);
+		if(bild!="") {
+		inhalt.push( {image: bild, width: 200} );
+		} else {
+		if(bildurl!="") {
+		inhalt.push( {qr: bildurl, fit: 200} );
+		} else {
+		inhalt.push( {text: "(Konnte kein Bild oder QR-Code erstellen)"} );
+		}
+		}
+		inhalt.push(
+		{text: fnshop.featured[i].description},
+		{text: " "},
+		{text: "Release: "+fnshop.featured[i].releaseDate},
+		{text: "Zuletzt gesehen: "+fnshop.featured[i].lastAppearance},
+		{text: "Seltenheit: "+fnshop.featured[i].rarity+" ("+fnshop.featured[i].internalRarity+")"},
+		{text: "Kaufbar: "+fnshop.featured[i].buyAllowed+", als Geschenk: "+fnshop.featured[i].giftAllowed},
+		{text: "Preis: "+fnshop.featured[i].price+" VBucks ("+fnshop.featured[i].priceNoDiscount+" VBucks)"},
+		{text: "Banner: "+fnshop.featured[i].banner},
+		{text: "Enthalten: "},
+		{text: " "}
+		);
+		for(j=0;j<fnshop.featured[i].otherItemsDetails.length;j++) {
+		inhalt.push(
+		{text: fnshop.featured[i].otherItemsDetails[j].name, fontSize: 15},
+		{text: fnshop.featured[i].otherItemsDetails[j].id}
+		);
+		var bildurl=fnshop.featured[i].otherItemsDetails[j].images.icon;
+		var bild=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl);
+		console.log(bildurl);
+		console.log(bild);
+		if(bild!="") {
+		inhalt.push( {image: bild, width: 150} );
+		} else {
+		if(bildurl!="") {
+		inhalt.push( {qr: bildurl, fit: 150} );
+		} else {
+		inhalt.push( {text: "(Konnte kein Bild oder QR-Code erstellen)"} );
+		}
+		}
+		inhalt.push(
+		{text: fnshop.featured[i].otherItemsDetails[j].description},
+		{text: " "}
+		);
+		}
+		inhalt.push(
+		{text: "_____________________________"},
+		{text: " "}
+		);
+		
+		
+		}
+		
+		// Weekly challenges
+		
+		var weekly = Object.values(fnchallenges.weeks);
+		console.log(weekly);
+		
+		inhalt.push(
+		{text: "Wochen-Herausforderungen", fontSize: 30, alignment: 'center', pageBreak: 'before', tocItem: true},
+		{text: " "}
+		);
+		
+		for(i=0;i<weekly.length;i++) {
+		inhalt.push(
+		{text: weekly[i].name, fontSize: 20, color: '#'+weekly[i].color},
+		{text: " "}
+		
+		);
+		
+		for(j=0;j<weekly[i].challenges.length;j++) {
+		inhalt.push(
+		{text: weekly[i].challenges[j].title+" ("+weekly[i].challenges[j].progress_total+")", fontSize: 15},
+		{text: weekly[i].challenges[j].quest_id},
+		{text: "XP: "+weekly[i].challenges[j].xp}, 
+		{text: "Stars: "+weekly[i].challenges[j].stars},
+		{text: "Party Assist: "+weekly[i].challenges[j].party_assist},
+		{text: "Prestige: "+weekly[i].challenges[j].prestige},
+		{text: "____________________________________"},
+		{text: " "}
+		);
+		
+		}
+		
+		}
+		
+		// other challenges
+		/*
+		
+		inhalt.push(
+		{text: "Andere Herausforderungen", fontSize: 30, alignment: 'center', tocItem: true, pageBreak: 'before'},
+		{text: " "}
+		
+		
+		); 
+		
+		for(i=0;i<fnchallenges.other.length;i++) {
+		inhalt.push(
+		{text: fnchallenges.other[i].name, fontSize: 20, color: '#'+fnchallenges.other[i].color},
+		{text: " "}
+		
+		);
+		
+		for(j=0;j<fnchallenges.other[i].challenges.length;j++) {
+		inhalt.push(
+		{text: fnchallenges.other[i].challenges[j].title+" ("+fnchallenges.other[i].challenges[j].progress_total+")", fontSize: 15},
+		{text: fnchallenges.other[i].challenges[j].quest_id},
+		{text: "XP: "+fnchallenges.other[i].challenges[j].xp}, 
+		{text: "Stars: "+fnchallenges.other[i].challenges[j].stars},
+		{text: "Party Assist: "+fnchallenges.other[i].challenges[j].party_assist},
+		{text: "Prestige: "+fnchallenges.other[i].challenges[j].prestige},
+		{text: "____________________________________"},
+		{text: " "}
+		
+		
+		
+		);
+		
+		}
+		
+		
+		}
+		*/
+		
+		
+		
+
+// ------------------------------------------
+
+		var docDefinition = {
+			content: inhalt,
+			header: {text: "fnReport "+datum, alignment: 'center', fontSize: 8},
+			footer: function(currentPage) { return {text: currentPage, alignment: 'center', fontSize: 8}}
+
+		};
+
+		
+		console.log("PDF wird erstellt...");
+		pdfMake.createPdf(docDefinition).download("fnReport-"+datum+"-"+pvar+"-de.pdf");
+		console.log("Fertig.");
+	</script>
+	
+	</body>
+	</html>
