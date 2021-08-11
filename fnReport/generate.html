@@ -52,9 +52,9 @@ console.log("cover, toc, br news");
 		{text: "fnReport", fontSize: 75}
 		];
 		if(fnuser.result=true) {
-		inhalt.push({text: datum+" - "+timeConverter(datum)+" - "+pvar1+" - "+fnuser.account_id+" - de", alignment: 'center'});
+		inhalt.push({text: datum+" - "+timeConverter(datum)+" - "+pvar1+" - "+fnuser.account_id+" - "+pvar2, alignment: 'center'});
 		} else {
-		inhalt.push({text: datum+" - "+timeConverter(datum)+" - "+pvar1+" - "+fnuser.error+" - de", alignment: 'center'});
+		inhalt.push({text: datum+" - "+timeConverter(datum)+" - "+pvar1+" - "+fnuser.error+" - "+pvar2, alignment: 'center'});
 		}
 		
 		
