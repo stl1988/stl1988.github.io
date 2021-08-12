@@ -23,6 +23,7 @@
 	<script type="text/javascript" charset="utf-8">
 		const urlParams = new URLSearchParams(window.location.search);
 		const pvar = urlParams.get('key');
+		const pvar2 = urlParams.get('lang');
 	 	alert(pvar);
 		
 		// Put your fortniteapi.io API key here
@@ -30,7 +31,7 @@
 		// ------------------------------------
 
 		var datum=date.getTime()/1000;
-		var fnpoi = JSON.parse(httpGet2("https://fortniteapi.io/game/poi?lang=en","Authorization",apikey));
+		var fnpoi = JSON.parse(httpGet2("https://fortniteapi.io/v1/game/poi?lang="+pvar2,"Authorization",apikey));
 		
 		var inhalt=[];
 		
