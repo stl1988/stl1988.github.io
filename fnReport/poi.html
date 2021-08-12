@@ -1,1 +1,97 @@
+<html>
+<head>
+	<!-- Scriptquellen hier -->
+<script src="time.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+<script src="http.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.65/pdfmake.js" integrity="sha256-J+l85Q8XyhHTkFns/opB6j+V03G5DGvfa/a2Rokow3k=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.65/vfs_fonts.js" integrity="sha256-UsYCHdwExTu9cZB+QgcOkNzUCTweXr5cNfRlAAtIlPY=" crossorigin="anonymous"></script>
+
+<!--
+<script src="//cdn.jsdelivr.net/npm/eruda"></script>
+<script>eruda.init();</script>
+-->
+
+</head>
+
+
+<body>
+	<script type="text/javascript" charset="utf-8">
+	// const urlParams = new URLSearchParams(window.location.search);
+// 		const pvar = urlParams.get('user');
+	// 	alert(pvar);
+		
+		// Put your fortniteapi.io API key here
+		var apikey = "01234567-89abcdef-01234567-89abcdef";
+		// ------------------------------------
+
+		var datum=date.getTime()/1000;
+		var fnpoi = JSON.parse(httpGet2("https://fortniteapi.io/game/poi?lang=en","Authorization",apikey));
+		
+		var inhalt=[];
+		
+		
+
+console.log("cover");
+		
+		// map
+		console.log("map");
+		var karte=httpGet("https://helloacm.com/api/image-to-base64/?url=https://media.fortniteapi.io/images/map.png?showPOI=true");
+		inhalt.push(
+		{text: "Fortnite POI Guide, Version "+fnpoi.gameVersion, fontSize: 30, alignment: 'center'},
+		{text: " "},
+		{image: karte, width: 500, alignment: 'center'},
+		{text: " "},
+		{text: "Help to preserve Fortnite's History!"}
+		);
+		
+		console.log("poi images");
+		for(i=0;i<fnpoi.list.length;i++) {
+		inhalt.push(
+		{text: fnpoi.list[i].name, fontSize: 20, pageBreak: 'before'},
+		{text: "Located at X "+fnpoi.list[i].x+" Y "+fnpoi.list[i].y},
+		{text: fnpoi.list[i].id}
+		);
+		for(j=0;j<fnpoi.list[i].images.length;j++) {
+		console.log(fnpoi.list[i].images[j].url);
+		var photo=httpGet("https://helloacm.com/api/image-to-base64/?url="+fnpoi.list[i].images[j].url);
+		console.log(photo);
+		inhalt.push(
+		{text: " "},
+		{text: fnpoi.list[i].images[j].type},
+		{image: photo, width: 500} 
+		);
+		}
+		
+		
+		}
+		
+	
+		
+		
+		
+		
+		
+		
+
+// ------------------------------------------
+
+		var docDefinition = {
+			content: inhalt,
+			header: {text: "fnAtlas "+fnpoi.gameVersion, alignment: 'center', fontSize: 8},
+			footer: function(currentPage) { return {text: currentPage, alignment: 'center', fontSize: 8}}
+
+		};
+
+		
+		console.log("PDF wird erstellt...");
+		pdfMake.createPdf(docDefinition).download("fnAtlas-"+fnpoi.gameVersion+".pdf");
+		console.log("Fertig.");
+	</script>
+	
+	</body>
+	</html>
