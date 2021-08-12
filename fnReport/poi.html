@@ -21,12 +21,12 @@
 
 <body>
 	<script type="text/javascript" charset="utf-8">
-	// const urlParams = new URLSearchParams(window.location.search);
-// 		const pvar = urlParams.get('user');
-	// 	alert(pvar);
+		const urlParams = new URLSearchParams(window.location.search);
+		const pvar = urlParams.get('key');
+	 	alert(pvar);
 		
 		// Put your fortniteapi.io API key here
-		var apikey = "01234567-89abcdef-01234567-89abcdef";
+		var apikey = pvar;
 		// ------------------------------------
 
 		var datum=date.getTime()/1000;
@@ -46,7 +46,7 @@ console.log("cover");
 		{text: " "},
 		{image: karte, width: 500, alignment: 'center'},
 		{text: " "},
-		{text: "Help to preserve Fortnite's History!"}
+		{text: "Help to preserve Fortnite's History!", alignment: 'center'}
 		);
 		
 		console.log("poi images");
