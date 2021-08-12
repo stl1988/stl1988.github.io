@@ -1,1 +1,78 @@
+<html>
+<head>
+	<!-- Scriptquellen hier -->
+<script src="time.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+<script src="http.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.65/pdfmake.js" integrity="sha256-J+l85Q8XyhHTkFns/opB6j+V03G5DGvfa/a2Rokow3k=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.65/vfs_fonts.js" integrity="sha256-UsYCHdwExTu9cZB+QgcOkNzUCTweXr5cNfRlAAtIlPY=" crossorigin="anonymous"></script>
+
+<!--
+<script src="//cdn.jsdelivr.net/npm/eruda"></script>
+<script>eruda.init();</script>
+-->
+
+</head>
+
+
+<body>
+	<script type="text/javascript" charset="utf-8">
+	 const urlParams = new URLSearchParams(window.location.search);
+ 		const pvar = urlParams.get('key');
+	 	alert(pvar);
+		
+		// Put your fortniteapi.io API key here
+		var apikey = pvar;
+		// ------------------------------------
+
+		var datum=date.getTime()/1000;
+		var fnmaps = JSON.parse(httpGet2("https://fortniteapi.io/v1/maps/list","Authorization",apikey));
+		
+		var inhalt=[];
+		
+		
+
+console.log("cover");
+
+inhalt.push(
+{text: "History of Fortnite Maps", fontSize: 30, alignment: 'center'}
+);
+		for(i=0;i<fnmaps.maps.length;i++) {
+		var karte=httpGet("https://helloacm.com/api/image-to-base64/?url="+fnmaps.maps[i].url);
+		console.log(fnmaps.maps[i].url);
+		// console.log(karte);
+		inhalt.push(
+		{text: fnmaps.maps[i].patchVersion, fontSize: 20, alignment: 'center', pageBreak: 'before'},
+		{text: fnmaps.maps[i].releaseDate, alignment: 'center'},
+		{image: karte, width: 500, alignment: 'center'}
+		);
+	}
+	
+		
+		
+		
+		
+		
+		
+
+// ------------------------------------------
+
+		var docDefinition = {
+			content: inhalt,
+			header: {text: "fnHistory "+datum, alignment: 'center', fontSize: 8},
+			footer: function(currentPage) { return {text: currentPage, alignment: 'center', fontSize: 8}}
+
+		};
+
+		
+		console.log("PDF wird erstellt...");
+		pdfMake.createPdf(docDefinition).download("fnHistory-"+datum+".pdf");
+		console.log("Fertig.");
+	</script>
+	
+	</body>
+	</html>
