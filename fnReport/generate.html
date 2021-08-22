@@ -121,7 +121,7 @@ console.log("cover, toc, br news");
 
 		
 		for(i=0;i<fnbr.news.length;i++) {
-			bilder = Object.append({brnews: fnbr.news[i].image},bilder);
+			bilder = Object.assign({brnews: fnbr.news[i].image},bilder);
 		//var bildurl=fnbr.news[i].image;
 		//var bild=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl);
 		//console.log(bildurl);
