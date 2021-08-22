@@ -29,8 +29,8 @@
 		
 		
 		var apikey = pvar3;
-		// ------------------------------------
-
+		
+		// Endpoints ================================================================================================================
 		var datum=date.getTime()/1000;
 		var fnbr = JSON.parse(httpGet2("https://fortniteapi.io/v1/news?lang="+pvar2+"&type=br","Authorization",apikey));
 		var fnstw = JSON.parse(httpGet2("https://fortniteapi.io/v1/news?lang="+pvar2+"&type=stw","Authorization",apikey));
@@ -45,8 +45,8 @@
 		
 		
 		
-// Cover
-console.log("cover, toc, br news");
+		// Cover ======================================================================================================================
+		console.log("cover, toc, br news");
 		var bilder = {
 			cover1: "https://cors.bridged.cc/"+fnbr.news[0].image,
 			cover2: "https://cors.bridged.cc/"+fnbr.news[1].image,
@@ -104,7 +104,7 @@ console.log("cover, toc, br news");
 		},
 		
 		
-		// toc
+		// toc ==========================================================================================
 		{toc: {
 		title: {text: "Contents", fontSize: 30},
 		numberStyle: {bold: true}
@@ -112,7 +112,7 @@ console.log("cover, toc, br news");
 		},
 		
 		
-		
+		// BR news ========================================================================================
 		{text: " "},
 		{text: "Battle Royale News", fontSize: 30, alignment: 'center', pageBreak: 'before', tocItem: true},
 		{text: " "}
@@ -122,31 +122,14 @@ console.log("cover, toc, br news");
 		
 		for(i=0;i<fnbr.news.length;i++) {
 			bilder = Object.assign({["brnews"+i]: "https://cors.bridged.cc/"+fnbr.news[i].image},bilder);
-			console.log(bilder);
-		//var bildurl=fnbr.news[i].image;
-		//var bild=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl);
-		//console.log(bildurl);
-		//console.log(bild);
+			
+	
 		inhalt.push(
 		{text: fnbr.news[i].title, fontSize: 20},
 		{text: fnbr.news[i].date+", aktuell: "+fnbr.news[i].live+", AdSpace: "+fnbr.news[i].adspace},
 		{text: " "},
 			{image: 'brnews'+i, width: 200},
-			/*
-		);
 		
-		if(bild!="") {
-		inhalt.push( {image: brnews, width: 200} );
-		} else {
-		if(bildurl!="") {
-		inhalt.push( {qr: fnbr.news[i].image, fit: 200} );
-		} else {
-		inhalt.push( {text: "(Konnte kein Bild oder QR-Code erstellen)"} );
-		}
-		}
-		
-		inhalt.push(
-		*/
 		{text: " "},
 		{text: fnbr.news[i].body},
 		{text: "______________________________"},
@@ -156,7 +139,7 @@ console.log("cover, toc, br news");
 		}
 		
 		
-		// stw news
+		// STW news ===================================================================================================
 		console.log("stw news");
 		inhalt.push(
 		{text: " "},
@@ -165,27 +148,15 @@ console.log("cover, toc, br news");
 		);
 		
 		for(i=0;i<fnstw.news.length;i++) {
-		var bildurl=fnstw.news[i].image;
-		var bild=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl);
-		console.log(bildurl);
-		console.log(bild);
+			bilder = Object.assign({["stwnews"+i]: "https://cors.bridged.cc/"+fnstw.news[i].image},bilder);
+			
+	
 		inhalt.push(
 		{text: fnstw.news[i].title, fontSize: 20},
 		{text: fnstw.news[i].date+", aktuell: "+fnstw.news[i].live+", AdSpace: "+fnstw.news[i].adspace},
-		{text: " "}
-		);
+		{text: " "},
+			{image: 'stwnews'+i, width: 200},
 		
-		if(bild!="") {
-		inhalt.push( {image: bild, width: 200} );
-		} else {
-		if(bildurl!="") {
-		inhalt.push( {qr: bildurl, fit: 200} );
-		} else {
-		inhalt.push( {text: "(Konnte kein Bild oder QR-Code erstellen)"} );
-		}
-		}
-		
-		inhalt.push(
 		{text: " "},
 		{text: fnstw.news[i].body},
 		{text: "______________________________"},
@@ -194,7 +165,7 @@ console.log("cover, toc, br news");
 		
 		}
 
-                // creative news
+                // Creative news ================================================================================================
 		console.log("creative news");
 		inhalt.push(
 		{text: " "},
@@ -203,27 +174,15 @@ console.log("cover, toc, br news");
 		);
 		
 		for(i=0;i<fncreative.news.length;i++) {
-		var bildurl=fncreative.news[i].image;
-		var bild=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl);
-		console.log(bildurl);
-		console.log(bild);
+			bilder = Object.assign({["creativenews"+i]: "https://cors.bridged.cc/"+fncreative.news[i].image},bilder);
+			
+	
 		inhalt.push(
 		{text: fncreative.news[i].title, fontSize: 20},
 		{text: fncreative.news[i].date+", aktuell: "+fncreative.news[i].live+", AdSpace: "+fncreative.news[i].adspace},
-		{text: " "}
-		);
+		{text: " "},
+			{image: 'creativenews'+i, width: 200},
 		
-		if(bild!="") {
-		inhalt.push( {image: bild, width: 200} );
-		} else {
-		if(bildurl!="") {
-		inhalt.push( {qr: bildurl, fit: 200} );
-		} else {
-		inhalt.push( {text: "(Couldn't create image or QR code)"} );
-		}
-		}
-		
-		inhalt.push(
 		{text: " "},
 		{text: fncreative.news[i].body},
 		{text: "______________________________"},
@@ -232,184 +191,43 @@ console.log("cover, toc, br news");
 		
 		}
 
-		// map
+		// Map ==================================================================================================================
 		console.log("map");
-		var karte=httpGet("https://helloacm.com/api/image-to-base64/?url=https://media.fortniteapi.io/images/map.png?showPOI=true");
-		console.log(karte);
+		// var karte=httpGet("https://helloacm.com/api/image-to-base64/?url=https://media.fortniteapi.io/images/map.png?showPOI=true");
+		// console.log(karte);
+		bilder = Object.assign({karte: "https://media.fortniteapi.io/images/map.png?showPOI=true"});
 		inhalt.push(
 		{text: "Current map (Battle Royale)", pageBreak: 'before', fontSize: 30, alignment: 'center', tocItem: true},
 		{text: " "},
-		{image: karte, width: 500, alignment: 'center'}
+		{image: 'karte', width: 500, alignment: 'center'}
 		);
 		
-		//matches
-		if(fnuser.result=true) {
-		console.log("matches");
-		inhalt.push(
-		{text: "Last played", fontSize: 30, pageBreak: 'before', alignment: 'center', tocItem: true},
-		{text: " "}
-		);
-		for(i=0;i<fnmatches.matches.length;i++) {
-		inhalt.push(
-		{text: fnmatches.matches[i].readable_name, fontSize: 20},
-		{text: fnmatches.matches[i].mode+" "+fnmatches.matches[i].platform},
-		{text: fnmatches.matches[i].date},
-		{text: fnmatches.matches[i].matchesplayed+" times"},
-		{text: fnmatches.matches[i].minutesplayed+" minutes"},
-		{text: fnmatches.matches[i].kills+" kills"},
-		{text: fnmatches.matches[i].playersoutlived+" outlived"},
-		{text: "Score: "+fnmatches.matches[i].score},
-		{text: " "}
+		//Stats ===============================================================================================================
+		//if(fnuser.result=true) {
 		
-		)
-		}
+		//}
 		
 		
 		}
 /*
-		// shop
+		// Shop =================================================================================================================
 		console.log("shop");
 		inhalt.push(
 		{text: "Shop", alignment: 'center', pageBreak: 'before', fontSize: 30, tocItem: true},
 		{text: "Last updated: "+fnshop.lastUpdate.date},
                 {text: " "}
 		);
-		for(i=0;i<fnshop.shop.length;i++) {
-		// console.log(bildurl);
-		// console.log(bild);
-		inhalt.push(
-		{text: fnshop.featured[i].name, fontSize: 20},
-		{text: fnshop.featured[i].id}
-		);
-		if(bild!="") {
-		inhalt.push( {image: bild, width: 200} );
-		} else {
-		if(bildurl!="") {
-		inhalt.push( {qr: bildurl, fit: 200} );
-		} else {
-		inhalt.push( {text: "(Couldn't create image or QR code)"} );
-		}
-		}
-		inhalt.push(
-		{text: fnshop.featured[i].description},
-		{text: " "},
-		{text: "Release: "+fnshop.featured[i].releaseDate},
-		{text: "Last seen: "+fnshop.featured[i].lastAppearance},
-		{text: "Rarity: "+fnshop.featured[i].rarity+" ("+fnshop.featured[i].internalRarity+")"},
-		{text: "Can purchase: "+fnshop.featured[i].buyAllowed+", als Geschenk: "+fnshop.featured[i].giftAllowed},
-		{text: "Price: "+fnshop.featured[i].price+" VBucks ("+fnshop.featured[i].priceNoDiscount+" VBucks)"},
-		{text: "Banner: "+fnshop.featured[i].banner},
-		{text: "Contains: "},
-		{text: " "}
-		);
-		for(j=0;j<fnshop.featured[i].otherItemsDetails.length;j++) {
-		inhalt.push(
-		{text: fnshop.featured[i].otherItemsDetails[j].name, fontSize: 15},
-		{text: fnshop.featured[i].otherItemsDetails[j].id}
-		);
-		var bildurl=fnshop.featured[i].otherItemsDetails[j].images.icon;
-		var bild=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl);
-		console.log(bildurl);
-		console.log(bild);
-		if(bild!="") {
-		inhalt.push( {image: bild, width: 150} );
-		} else {
-		if(bildurl!="") {
-		inhalt.push( {qr: bildurl, fit: 150} );
-		} else {
-		inhalt.push( {text: "(Couldn't create image or QR code)"} );
-		}
-		}
-		inhalt.push(
-		{text: fnshop.featured[i].otherItemsDetails[j].description},
-		{text: " "}
-		);
-		}
-		inhalt.push(
-		{text: "_____________________________"},
-		{text: " "}
-		);
 		
-		
-		}
 		*/
 
-		// Weekly challenges
-		/*
-		var weekly = Object.values(fnchallenges.weeks);
-		console.log(weekly);
 		
-		inhalt.push(
-		{text: "Weekly challenges", fontSize: 30, alignment: 'center', pageBreak: 'before', tocItem: true},
-		{text: " "}
-		);
-		
-		for(i=0;i<weekly.length;i++) {
-		inhalt.push(
-		{text: weekly[i].name, fontSize: 20, color: '#'+weekly[i].color},
-		{text: " "}
-		
-		);
-		
-		for(j=0;j<weekly[i].challenges.length;j++) {
-		inhalt.push(
-		{text: weekly[i].challenges[j].title+" ("+weekly[i].challenges[j].progress_total+")", fontSize: 15},
-		{text: weekly[i].challenges[j].quest_id},
-		{text: "XP: "+weekly[i].challenges[j].xp}, 
-		{text: "Stars: "+weekly[i].challenges[j].stars},
-		{text: "Party Assist: "+weekly[i].challenges[j].party_assist},
-		{text: "Prestige: "+weekly[i].challenges[j].prestige},
-		{text: "____________________________________"},
-		{text: " "}
-		);
-		
-		}
-		
-		}
-		
-		// other challenges
-		
-		
-		inhalt.push(
-		{text: "Andere Herausforderungen", fontSize: 30, alignment: 'center', tocItem: true, pageBreak: 'before'},
-		{text: " "}
-		
-		
-		); 
-		
-		for(i=0;i<fnchallenges.other.length;i++) {
-		inhalt.push(
-		{text: fnchallenges.other[i].name, fontSize: 20, color: '#'+fnchallenges.other[i].color},
-		{text: " "}
-		
-		);
-		
-		for(j=0;j<fnchallenges.other[i].challenges.length;j++) {
-		inhalt.push(
-		{text: fnchallenges.other[i].challenges[j].title+" ("+fnchallenges.other[i].challenges[j].progress_total+")", fontSize: 15},
-		{text: fnchallenges.other[i].challenges[j].quest_id},
-		{text: "XP: "+fnchallenges.other[i].challenges[j].xp}, 
-		{text: "Stars: "+fnchallenges.other[i].challenges[j].stars},
-		{text: "Party Assist: "+fnchallenges.other[i].challenges[j].party_assist},
-		{text: "Prestige: "+fnchallenges.other[i].challenges[j].prestige},
-		{text: "____________________________________"},
-		{text: " "}
-		
-		
-		
-		);
-		
-		}
-		
-		
-		}
-		*/
 		
 		
 		
 
 // ------------------------------------------
-
+		console.log(inhalt);
+console.log(bilder);
 		var docDefinition = {
 			images: bilder,
 			content: inhalt,
@@ -419,7 +237,7 @@ console.log("cover, toc, br news");
 
 		};
 
-		
+		console.log(docDefinition);
 		console.log("Creating PDF...");
 		pdfMake.createPdf(docDefinition).download("fnReport-"+datum+"-"+pvar1+"-"+pvar2+".pdf");
 		console.log("Done. Please wait for the PDF to download.");
