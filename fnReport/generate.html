@@ -48,12 +48,12 @@
 		// Cover ======================================================================================================================
 		console.log("cover, toc, br news");
 		var bilder = {
-			cover1: "https://cors.bridged.cc/"+fnbr.news[0].image,
-			cover2: "https://cors.bridged.cc/"+fnbr.news[1].image,
-			cover3: "https://cors.bridged.cc/"+fnstw.news[0].image,
-			cover4: "https://cors.bridged.cc/"+fncreative.news[0].image,
-			cover5: "https://cors.bridged.cc/"+fnshop.shop[0].granted[0].images.icon,
-			cover6: "https://cors.bridged.cc/"+fnshop.shop[0].granted[1].images.icon
+			cover1: "https://thingproxy.freeboard.io/fetch/"+fnbr.news[0].image,
+			cover2: "https://thingproxy.freeboard.io/fetch/"+fnbr.news[1].image,
+			cover3: "https://thingproxy.freeboard.io/fetch/"+fnstw.news[0].image,
+			cover4: "https://thingproxy.freeboard.io/fetch/"+fncreative.news[0].image,
+			cover5: "https://thingproxy.freeboard.io/fetch/"+fnshop.shop[0].granted[0].images.icon,
+			cover6: "https://thingproxy.freeboard.io/fetch/"+fnshop.shop[0].granted[1].images.icon
 		};
 		var inhalt = [
 		
@@ -121,7 +121,7 @@
 
 		
 		for(i=0;i<fnbr.news.length;i++) {
-			bilder = Object.assign({["brnews"+i]: "https://cors.bridged.cc/"+fnbr.news[i].image},bilder);
+			bilder = Object.assign({["brnews"+i]: "https://thingproxy.freeboard.io/fetch/"+fnbr.news[i].image},bilder);
 			
 	
 		inhalt.push(
@@ -148,7 +148,7 @@
 		);
 		
 		for(i=0;i<fnstw.news.length;i++) {
-			bilder = Object.assign({["stwnews"+i]: "https://cors.bridged.cc/"+fnstw.news[i].image},bilder);
+			bilder = Object.assign({["stwnews"+i]: "https://thingproxy.freeboard.io/fetch/"+fnstw.news[i].image},bilder);
 			
 	
 		inhalt.push(
@@ -174,7 +174,7 @@
 		);
 		
 		for(i=0;i<fncreative.news.length;i++) {
-			bilder = Object.assign({["creativenews"+i]: "https://cors.bridged.cc/"+fncreative.news[i].image},bilder);
+			bilder = Object.assign({["creativenews"+i]: "https://thingproxy.freeboard.io/fetch/"+fncreative.news[i].image},bilder);
 			
 	
 		inhalt.push(
