@@ -122,6 +122,7 @@ console.log("cover, toc, br news");
 		
 		for(i=0;i<fnbr.news.length;i++) {
 			bilder = Object.assign({["brnews"+i]: "https://cors.bridged.cc/"+fnbr.news[i].image},bilder);
+			console.log(bilder);
 		//var bildurl=fnbr.news[i].image;
 		//var bild=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl);
 		//console.log(bildurl);
@@ -130,7 +131,7 @@ console.log("cover, toc, br news");
 		{text: fnbr.news[i].title, fontSize: 20},
 		{text: fnbr.news[i].date+", aktuell: "+fnbr.news[i].live+", AdSpace: "+fnbr.news[i].adspace},
 		{text: " "},
-			{image: 'brnews', width: 200},
+			{image: 'brnews'+i, width: 200},
 			/*
 		);
 		
