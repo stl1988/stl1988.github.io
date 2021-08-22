@@ -47,6 +47,14 @@
 		
 // Cover
 console.log("cover, toc, br news");
+		var images = {
+			cover1: fnbr.news[0].image,
+			cover2: fnbr.news[1].image,
+			cover3: bildurl3=fnstw.news[0].image,
+			cover4: bildurl4=fncreative.news[0].image,
+			cover5: fnshop.shop[0].granted[0].images.icon,
+			cover6: fnshop.shop[1].granted[0].images.icon
+		};
 		var inhalt = [
 		
 		{text: "fnReport", fontSize: 75}
@@ -65,30 +73,7 @@ console.log("cover, toc, br news");
 		var farbe3='#'+('00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6);
 		console.log(farbe3);
 		
-		var bildurl1=fnbr.news[0].image;
-		var bild1=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl1);
-		console.log(bildurl1);
-		console.log(bild1);
-		var bildurl2=fnbr.news[1].image;
-		var bild2=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl2);
-		console.log(bildurl2);
-		console.log(bild2);
-		var bildurl3=fnstw.news[0].image;
-		var bild3=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl3); 
-		console.log(bildurl3);
-		console.log(bild3);
-		var bildurl4=fncreative.news[0].image;
-		var bild4=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl4);
-		console.log(bildurl4);
-		console.log(bild4);
-		var bildurl5=fnshop.shop[0].granted[0].images.icon;
-		var bild5=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl5);
-		console.log(bildurl5);
-		console.log(bild5);
-		var bildurl6=fnshop.shop[1].granted[0].icon;
-		var bild6=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl6);
-		console.log(bildurl6);
-		console.log(bild6);
+		
 		
 		inhalt.push(
 		{text: "Made with fortniteapi.io", alignment: 'center'},
@@ -101,16 +86,16 @@ console.log("cover, toc, br news");
 		widths: [250,250],
 		body: [
 		[
-		{image: bild1, fillColor: farbe1, width: 245, alignment: 'center'},
-		{image: bild2, fillColor: farbe1, width: 245, alignment: 'center'}
+		{image: cover1, fillColor: farbe1, width: 245, alignment: 'center'},
+		{image: cover2, fillColor: farbe1, width: 245, alignment: 'center'}
 		],
 		[
-		{image: bild3, fillColor: farbe2, width: 245, alignment: 'center'},
-		{image: bild4, fillColor: farbe2, width: 245, alignment: 'center'}
+		{image: cover3, fillColor: farbe2, width: 245, alignment: 'center'},
+		{image: cover4, fillColor: farbe2, width: 245, alignment: 'center'}
 		],
 		[
-		{image: bild5, fillColor: farbe3, width: 245, alignment: 'center'},
-		{image: bild6, fillColor: farbe3, width: 245, alignment: 'center'}
+		{image: cover5, fillColor: farbe3, width: 245, alignment: 'center'},
+		{image: cover6, fillColor: farbe3, width: 245, alignment: 'center'}
 		]
 		
 		]
@@ -136,27 +121,31 @@ console.log("cover, toc, br news");
 
 		
 		for(i=0;i<fnbr.news.length;i++) {
-		var bildurl=fnbr.news[i].image;
-		var bild=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl);
-		console.log(bildurl);
-		console.log(bild);
+			images = Object.append({brnews: fnbr.news[i].image},images);
+		//var bildurl=fnbr.news[i].image;
+		//var bild=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl);
+		//console.log(bildurl);
+		//console.log(bild);
 		inhalt.push(
 		{text: fnbr.news[i].title, fontSize: 20},
 		{text: fnbr.news[i].date+", aktuell: "+fnbr.news[i].live+", AdSpace: "+fnbr.news[i].adspace},
-		{text: " "}
+		{text: " "},
+			{image: brnews, width: 200},
+			/*
 		);
 		
 		if(bild!="") {
-		inhalt.push( {image: bild, width: 200} );
+		inhalt.push( {image: brnews, width: 200} );
 		} else {
 		if(bildurl!="") {
-		inhalt.push( {qr: bildurl, fit: 200} );
+		inhalt.push( {qr: fnbr.news[i].image, fit: 200} );
 		} else {
 		inhalt.push( {text: "(Konnte kein Bild oder QR-Code erstellen)"} );
 		}
 		}
 		
 		inhalt.push(
+		*/
 		{text: " "},
 		{text: fnbr.news[i].body},
 		{text: "______________________________"},
