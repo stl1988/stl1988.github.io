@@ -1,6 +1,6 @@
 <html>
 <head>
-	<!-- Scriptquellen hier -->
+	<!-- Script sources -->
 <script src="time.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -27,7 +27,7 @@
     const pvar3 = urlParams.get('key');
 		alert("user "+pvar1+", language "+pvar2+", API-key "+pvar3);
 		
-		// Put your fortniteapi.io API key here
+		
 		var apikey = pvar3;
 		// ------------------------------------
 
@@ -40,8 +40,8 @@
 		var fnmatches= JSON.parse(httpGet2("https://fortniteapi.io/v1/matches?account="+fnuser.account_id,"Authorization",apikey));
 		var fnstats= JSON.parse(httpGet2("https://fortniteapi.io/v1/stats?account="+fnuser.account_id,"Authorization",apikey));
                 }
-		var fnshop= JSON.parse(httpGet2("https://fortniteapi.io/v1/shop?lang="+pvar2,"Authorization",apikey));
-		var fnchallenges = JSON.parse(httpGet2("https://fortniteapi.io/v1/challenges?season=current&lang"+pvar2,"Authorization",apikey));
+		var fnshop= JSON.parse(httpGet2("https://fortniteapi.io/v2/shop?lang="+pvar2,"Authorization",apikey));
+		var fnchallenges = JSON.parse(httpGet2("https://fortniteapi.io/v2/challenges?season=current&lang"+pvar2,"Authorization",apikey));
 		
 		
 		
@@ -81,11 +81,11 @@ console.log("cover, toc, br news");
 		var bild4=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl4);
 		console.log(bildurl4);
 		console.log(bild4);
-		var bildurl5=fnshop.featured[0].icon;
+		var bildurl5=fnshop.shop[0].granted[0].images.icon;
 		var bild5=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl5);
 		console.log(bildurl5);
 		console.log(bild5);
-		var bildurl6=fnshop.featured[1].icon;
+		var bildurl6=fnshop.shop[1].granted[0].icon;
 		var bild6=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl6);
 		console.log(bildurl6);
 		console.log(bild6);
@@ -276,17 +276,17 @@ console.log("cover, toc, br news");
 		
 		
 		}
+/*
 		// shop
 		console.log("shop");
 		inhalt.push(
-		{text: "Daily Shop", alignment: 'center', pageBreak: 'before', fontSize: 30, tocItem: true},
-		{text: " "}
+		{text: "Shop", alignment: 'center', pageBreak: 'before', fontSize: 30, tocItem: true},
+		{text: "Last updated: "+fnshop.lastUpdate.date},
+                {text: " "}
 		);
-		for(i=0;i<fnshop.featured.length;i++) {
-		var bildurl=fnshop.featured[i].icon;
-		var bild=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl);
-		console.log(bildurl);
-		console.log(bild);
+		for(i=0;i<fnshop.shop.length;i++) {
+		// console.log(bildurl);
+		// console.log(bild);
 		inhalt.push(
 		{text: fnshop.featured[i].name, fontSize: 20},
 		{text: fnshop.featured[i].id}
@@ -342,7 +342,8 @@ console.log("cover, toc, br news");
 		
 		
 		}
-		
+		*/
+
 		// Weekly challenges
 		/*
 		var weekly = Object.values(fnchallenges.weeks);
