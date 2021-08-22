@@ -47,14 +47,7 @@
 		
 // Cover
 console.log("cover, toc, br news");
-		var bilder = {
-			cover1: fnbr.news[0].image,
-			cover2: fnbr.news[1].image,
-			cover3: fnstw.news[0].image,
-			cover4: fncreative.news[0].image,
-			cover5: fnshop.shop[0].granted[0].images.icon,
-			cover6: fnshop.shop[1].granted[0].images.icon
-		};
+		
 		var inhalt = [
 		
 		{text: "fnReport", fontSize: 75}
@@ -102,7 +95,14 @@ console.log("cover, toc, br news");
 		
 		}
 		},
-		
+		var bilder = {
+			cover1: fnbr.news[0].image,
+			cover2: fnbr.news[1].image,
+			cover3: fnstw.news[0].image,
+			cover4: fncreative.news[0].image,
+			cover5: fnshop.shop[0].granted[0].images.icon,
+			cover6: fnshop.shop[1].granted[0].images.icon
+		};
 		
 		// toc
 		{toc: {
@@ -410,8 +410,9 @@ console.log("cover, toc, br news");
 // ------------------------------------------
 
 		var docDefinition = {
-			content: inhalt,
 			images: bilder,
+			content: inhalt,
+			
 			header: {text: "fnReport "+datum, alignment: 'center', fontSize: 8},
 			footer: function(currentPage) { return {text: currentPage, alignment: 'center', fontSize: 8}}
 
