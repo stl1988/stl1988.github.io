@@ -48,12 +48,12 @@
 		// Cover ======================================================================================================================
 		console.log("cover, toc, br news");
 		var bilder = {
-			cover1: "http://www.whateverorigin.org/get?url="+fnbr.news[0].image,
-			cover2: "http://www.whateverorigin.org/get?url="+fnbr.news[1].image,
-			cover3: "http://www.whateverorigin.org/get?url="+fnstw.news[0].image,
-			cover4: "http://www.whateverorigin.org/get?url="+fncreative.news[0].image,
-			cover5: "http://www.whateverorigin.org/get?url="+fnshop.shop[0].granted[0].images.icon,
-			cover6: "http://www.whateverorigin.org/get?url="+fnshop.shop[0].granted[1].images.icon
+			cover1: "https://api.allorigins.win/raw?url="+fnbr.news[0].image,
+			cover2: "https://api.allorigins.win/raw?url="+fnbr.news[1].image,
+			cover3: "https://api.allorigins.win/raw?url="+fnstw.news[0].image,
+			cover4: "https://api.allorigins.win/raw?url="+fncreative.news[0].image,
+			cover5: "https://api.allorigins.win/raw?url="+fnshop.shop[0].granted[0].images.icon,
+			cover6: "https://api.allorigins.win/raw?url="+fnshop.shop[0].granted[1].images.icon
 		};
 		var inhalt = [
 		
@@ -121,7 +121,7 @@
 
 		
 		for(i=0;i<fnbr.news.length;i++) {
-			bilder = Object.assign({["brnews"+i]: "http://www.whateverorigin.org/get?url="+fnbr.news[i].image},bilder);
+			bilder = Object.assign({["brnews"+i]: "https://api.allorigins.win/raw?url="+fnbr.news[i].image},bilder);
 			
 	
 		inhalt.push(
@@ -148,7 +148,7 @@
 		);
 		
 		for(i=0;i<fnstw.news.length;i++) {
-			bilder = Object.assign({["stwnews"+i]: "http://www.whateverorigin.org/get?url="+fnstw.news[i].image},bilder);
+			bilder = Object.assign({["stwnews"+i]: "https://api.allorigins.win/raw?url="+fnstw.news[i].image},bilder);
 			
 	
 		inhalt.push(
@@ -174,7 +174,7 @@
 		);
 		
 		for(i=0;i<fncreative.news.length;i++) {
-			bilder = Object.assign({["creativenews"+i]: "http://www.whateverorigin.org/get?url="+fncreative.news[i].image},bilder);
+			bilder = Object.assign({["creativenews"+i]: "https://api.allorigins.win/raw?url="+fncreative.news[i].image},bilder);
 			
 	
 		inhalt.push(
