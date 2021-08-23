@@ -54,7 +54,7 @@
 		var fnchallenges = JSON.parse(httpGet2("https://fortniteapi.io/v2/challenges?season=current&lang"+pvar2,"Authorization",apikey));
     
     // BR news ==================================================================================================================
-    document.write("<h2>BR News</h2><br>");
+    document.write("<h2>Battle Royale News</h2><br>");
     for(i=0;i<fnbr.news.length;i++) {
      document.write("<h3>"+fnbr.news[i].title+"</h3><h4>"+fnbr.news[i].tabTitle+"</h4>");
       document.write(fnbr.news[i].adspace+"<br>");
@@ -62,6 +62,33 @@
       document.write(fnbr.news[i].date+"<br>");
       document.write('<img src="'+fnbr.news[i].image+'">');
       document.write(fnbr.news[i].body+"<br>");
+      document.write("<br>");
+      
+      
+    }
+ // STW news ==================================================================================================================
+    document.write("<h2>Save The World News</h2><br>");
+    for(i=0;i<fnstw.news.length;i++) {
+     document.write("<h3>"+fnstw.news[i].title+"</h3><h4>"+fnstw.news[i].tabTitle+"</h4>");
+      document.write(fnstw.news[i].adspace+"<br>");
+      document.write(fnstw.news[i].id+"<br>");
+      document.write(fnstw.news[i].date+"<br>");
+      document.write('<img src="'+fnstw.news[i].image+'">');
+      document.write(fnstw.news[i].body+"<br>");
+      document.write("<br>");
+      
+      
+    }
+		
+		 // Creative news ==================================================================================================================
+    document.write("<h2>Creative News</h2><br>");
+    for(i=0;i<fnbr.news.length;i++) {
+     document.write("<h3>"+fncreative.news[i].title+"</h3><h4>"+fncreative.news[i].tabTitle+"</h4>");
+      document.write(fncreative.news[i].adspace+"<br>");
+      document.write(fncreative.news[i].id+"<br>");
+      document.write(fncreative.news[i].date+"<br>");
+      document.write('<img src="'+fncreative.news[i].image+'">');
+      document.write(fncreative.news[i].body+"<br>");
       document.write("<br>");
       
       
