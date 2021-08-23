@@ -1,1 +1,66 @@
+<html>
+<head>
+	<!-- Script sources -->
+<script src="time.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+<script src="http.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/pdfmake.min.js" integrity="sha512-Yf733gmgLgGUo+VfWq4r5HAEaxftvuTes86bKvwTpqOY3oH0hHKtX/9FfKYUcpaxeBJxeXvcN4EY3J6fnmc9cA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/vfs_fonts.js" integrity="sha512-cktKDgjEiIkPVHYbn8bh/FEyYxmt4JDJJjOCu5/FQAkW4bc911XtKYValiyzBiJigjVEvrIAyQFEbRJZyDA1wQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	
+<!--
+<script src="//cdn.jsdelivr.net/npm/eruda"></script>
+<script>eruda.init();</script>
+-->
+
+</head>
+
+
+<body>
+  <h1>API test for fnReport and fortniteapi.io</h1><br>
+  
+	<script type="text/javascript" charset="utf-8">
+	const urlParams = new URLSearchParams(window.location.search);
+		const pvar1 = urlParams.get('user');
+    const pvar2 = urlParams.get('lang');
+    const pvar3 = urlParams.get('key');
+		alert("user "+pvar1+", language "+pvar2+", API-key "+pvar3);
+		
+		
+		var apikey = pvar3;
+		
+		// Endpoints ================================================================================================================
+		var datum=date.getTime()/1000;
+		var fnbr = JSON.parse(httpGet2("https://fortniteapi.io/v1/news?lang="+pvar2+"&type=br","Authorization",apikey));
+		var fnstw = JSON.parse(httpGet2("https://fortniteapi.io/v1/news?lang="+pvar2+"&type=stw","Authorization",apikey));
+		var fncreative = JSON.parse(httpGet2("https://fortniteapi.io/v1/news?lang="+pvar2+"&type=creative","Authorization",apikey));
+		var fnuser = JSON.parse(httpGet2("https://fortniteapi.io/v1/lookup?username="+pvar1,"Authorization",apikey));
+		if(fnuser.result=true) {
+		var fnmatches= JSON.parse(httpGet2("https://fortniteapi.io/v1/matches?account="+fnuser.account_id,"Authorization",apikey));
+		var fnstats= JSON.parse(httpGet2("https://fortniteapi.io/v1/stats?account="+fnuser.account_id,"Authorization",apikey));
+                }
+		var fnshop= JSON.parse(httpGet2("https://fortniteapi.io/v2/shop?lang="+pvar2,"Authorization",apikey));
+		var fnchallenges = JSON.parse(httpGet2("https://fortniteapi.io/v2/challenges?season=current&lang"+pvar2,"Authorization",apikey));
+    
+    // BR news ==================================================================================================================
+    document.write("<h2>BR News</h2><br>");
+    for(i=0;i<fnbr.news.length;i++) {
+     document.write("<h3>"+fnbr.news[i].title+"</h3><h4>"+fnbr.news[i].tabTitle+"</h4>");
+      document.write(fnbr.news[i].adspace+"<br>");
+      document.write(fnbr.news[i].id+"<br>");
+      document.write(fnbr.news[i].date+"<br>");
+      document.write('<img src="'+fnbr.news[i].image+'">');
+      document.write(fnbr.news[i].body+"<br>");
+      document.write("<br>");
+      
+      
+    }
+    
+    
+    
+  </script>
+  </body>
+</html>
