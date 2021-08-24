@@ -121,15 +121,21 @@
 
 		
 		for(i=0;i<fnbr.news.length;i++) {
+			if(fnbr.news[i].image != null) {
 			bilder = Object.assign({["brnews"+i]: "https://api.allorigins.win/raw?url="+fnbr.news[i].image},bilder);
-			
-	
+			}
+		
 		inhalt.push(
 		{text: fnbr.news[i].title, fontSize: 20},
 		{text: fnbr.news[i].date+", aktuell: "+fnbr.news[i].live+", AdSpace: "+fnbr.news[i].adspace},
-		{text: " "},
-			{image: 'brnews'+i, width: 200},
-		
+		{text: " "}
+		);
+			if(fnbr.news[i].image != null) {
+			inhalt.push({image: 'brnews'+i, width: 200});
+			} else {
+				inhalt.push({text: "No image!"});
+			}
+			inhalt.push(
 		{text: " "},
 		{text: fnbr.news[i].body},
 		{text: "______________________________"},
@@ -148,15 +154,21 @@
 		);
 		
 		for(i=0;i<fnstw.news.length;i++) {
+			if(fnstw.news[i].image != null) {
 			bilder = Object.assign({["stwnews"+i]: "https://api.allorigins.win/raw?url="+fnstw.news[i].image},bilder);
-			
+			}
 	
 		inhalt.push(
 		{text: fnstw.news[i].title, fontSize: 20},
 		{text: fnstw.news[i].date+", aktuell: "+fnstw.news[i].live+", AdSpace: "+fnstw.news[i].adspace},
-		{text: " "},
-			{image: 'stwnews'+i, width: 200},
-		
+		{text: " "}
+			);
+			if(fnstw.news[i].image != null) {
+			inhalt.push({image: 'stwnews'+i, width: 200});
+			} else {
+				inhalt.push({text: "No image!"});
+			}
+		inhalt.push(
 		{text: " "},
 		{text: fnstw.news[i].body},
 		{text: "______________________________"},
@@ -174,15 +186,23 @@
 		);
 		
 		for(i=0;i<fncreative.news.length;i++) {
+			if(fncreative.news[i].image != 0) {
 			bilder = Object.assign({["creativenews"+i]: "https://api.allorigins.win/raw?url="+fncreative.news[i].image},bilder);
-			
+			}
 	
 		inhalt.push(
 		{text: fncreative.news[i].title, fontSize: 20},
 		{text: fncreative.news[i].date+", aktuell: "+fncreative.news[i].live+", AdSpace: "+fncreative.news[i].adspace},
-		{text: " "},
-			{image: 'creativenews'+i, width: 200},
+		{text: " "}
+		);
+			if(fncreative.news[i].image != 0) {
+			inhalt.push({image: 'creativenews'+i, width: 200});
+			} else {
+				inhalt.push({text: "No image!"});
+			}
 		
+				
+				inhalt.push(
 		{text: " "},
 		{text: fncreative.news[i].body},
 		{text: "______________________________"},
