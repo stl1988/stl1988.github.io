@@ -93,6 +93,31 @@
       
       
     }
+		
+		// Map ===============================================================================================================================
+		document.write('<h2>Current map</h2><img src="https://media.fortniteapi.io/images/map.png?showPOI=true" alt="map image"><br>');
+		
+		// Shop ==============================================================================================================================
+		document.write('<h2>Shop</h2>Updated: '+fnshop.lastUpdate.date+'<br>');
+		for(i=0;i<fnshop.shop.length;i++) {
+			document.write("<h3>"+fnshop.shop[i].displayName+"</h3>");
+			document.write("displayDescription: "+fnshop.shop[i].displayDescription+"<br>");
+			document.write("first released: "+fnshop.shop[i].firstReleaseDate+", previously released: "+fnshop.shop[i].previousReleaseDate+"<br>");
+			document.write("regular price: "+fnshop.shop[i].price.regularPrice+", final price: "+fnshop.shop[i].price.finalPrice+"<br>");
+			
+			document.write("displayAssets: <br>");
+			for(j=0;j<fnshop.shop[i].displayAssets.length;j++) {
+				document.write('<img src="'+fnshop.shop[i].displayAssets[j].full_background+'" alt="asset image">');
+			}
+			document.write("<br><br>granted: <br>");
+			for(k=0;k<fnshop.shop[i].granted.length;k++) {
+				document.write("<h4>"+fnshop.shop[i].granted[k].name+"</h4>");
+				document.write("description: "+fnshop.shop[i].granted[k].description+"<br>");
+				document.write("series: "+fnshop.shop[i].granted[k].series+"<br>");
+				document.write('<img src="'+fnshop.shop[i].granted[k].images.full_background+'" alt="granted image"><br>');
+			}
+			
+		}
     
     
     
