@@ -107,14 +107,14 @@
 			
 			document.write("displayAssets: <br>");
 			for(j=0;j<fnshop.shop[i].displayAssets.length;j++) {
-				document.write('<img src="'+fnshop.shop[i].displayAssets[j].full_background+'" alt="asset image">');
+				document.write('<img src="'+fnshop.shop[i].displayAssets[j].full_background+'" width=300 alt="asset image">');
 			}
 			document.write("<br><br>granted: <br>");
 			for(k=0;k<fnshop.shop[i].granted.length;k++) {
 				document.write("<h4>"+fnshop.shop[i].granted[k].name+"</h4>");
 				document.write("description: "+fnshop.shop[i].granted[k].description+"<br>");
 				document.write("series: "+fnshop.shop[i].granted[k].series+"<br>");
-				document.write('<img src="'+fnshop.shop[i].granted[k].images.full_background+'" alt="granted image"><br>');
+				document.write('<img src="'+fnshop.shop[i].granted[k].images.full_background+'" width=200 alt="granted image"><br>');
 			}
 			
 		}
