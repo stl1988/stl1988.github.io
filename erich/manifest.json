@@ -4,16 +4,20 @@
   "description": "Verfolge Erichs Leben hier: https://www.twitch.tv/rickymainia",
   "lang": "de-DE",
   "start_url": "/erich",
+  "scope": "/erich",
   "display": "standalone",
   "theme_color": "#2db6ad",
-  "background_color": "#45bcb6"
   "icons": [
     {
-      "src": "android-chrome-192x192.png", "sizes": "192x192"
+      "src": "android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
     },
     {
-      "src": "android-chrome-512x512.png", "sizes": "512x512"
+      "src": "android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
-  ]
-    
+  ],
+  "background_color": "#45bcb6"
 }
