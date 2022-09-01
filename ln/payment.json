@@ -1,7 +1,7 @@
 {
-    "callback": "https://stl1988.github.io/ln/payment-callback.json", // The URL from LN SERVICE which will accept the pay request parameters
-    "maxSendable": 10000, // Max millisatoshi amount LN SERVICE is willing to receive
-    "minSendable": 1, // Min millisatoshi amount LN SERVICE is willing to receive, can not be less than 1 or more than `maxSendable`
-    "metadata": "[[\"text/plain\", \"lorem ipsum blah blah\"]]", // Metadata json which must be presented as raw string here, this is required to pass signature verification at a later step
-    "tag": "payRequest" // Type of LNURL
+    "callback": "https://stl1988.github.io/ln/payment-callback.json",
+    "maxSendable": 10000,
+    "minSendable": 1,
+    "metadata": "[[\"text/plain\", \"lorem ipsum blah blah\"]]",
+    "tag": "payRequest"
 }
