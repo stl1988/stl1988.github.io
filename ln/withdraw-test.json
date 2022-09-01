@@ -1,0 +1,8 @@
+{
+    "tag": "withdrawRequest", // type of LNURL
+    "callback": "stl1988.github.io/ln/withdraw-callback.json", // The URL which LN SERVICE would accept a withdrawal Lightning invoice as query parameter
+    "k1": "ggggg", // Random or non-random string to identify the user's LN WALLET when using the callback URL
+    "defaultDescription": "This is a test.", // A default withdrawal invoice description
+    "minWithdrawable": 0, // Min amount (in millisatoshis) the user can withdraw from LN SERVICE, or 0
+    "maxWithdrawable": 10000000000, // Max amount (in millisatoshis) the user can withdraw from LN SERVICE, or equal to minWithdrawable if the user has no choice over the amounts
+}
