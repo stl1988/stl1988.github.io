@@ -1,0 +1,129 @@
+<html>
+<head>
+	<!-- Script sources -->
+  <script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
+  <link href="pagedjs-test.css" rel="stylesheet" type="text/css">
+  
+<script src="time.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+<script src="http.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/pdfmake.min.js" integrity="sha512-Yf733gmgLgGUo+VfWq4r5HAEaxftvuTes86bKvwTpqOY3oH0hHKtX/9FfKYUcpaxeBJxeXvcN4EY3J6fnmc9cA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/vfs_fonts.js" integrity="sha512-cktKDgjEiIkPVHYbn8bh/FEyYxmt4JDJJjOCu5/FQAkW4bc911XtKYValiyzBiJigjVEvrIAyQFEbRJZyDA1wQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	
+<!--
+<script src="//cdn.jsdelivr.net/npm/eruda"></script>
+<script>eruda.init();</script>
+-->
+<style>
+	img {
+    max-width: 100%;
+    height: auto;
+    width: auto\9; /* ie8 */
+}
+	</style>
+	
+	
+</head>
+
+
+<body>
+  <h1>API test for fnReport and fortniteapi.io</h1><br>
+  
+	<script type="text/javascript" charset="utf-8">
+	const urlParams = new URLSearchParams(window.location.search);
+		const pvar1 = urlParams.get('user');
+    const pvar2 = urlParams.get('lang');
+    const pvar3 = urlParams.get('key');
+		alert("user "+pvar1+", language "+pvar2+", API-key "+pvar3);
+		
+		
+		var apikey = pvar3;
+		
+		// Endpoints ================================================================================================================
+		var datum=date.getTime()/1000;
+		var fnbr = JSON.parse(httpGet2("https://fortniteapi.io/v1/news?lang="+pvar2+"&type=br","Authorization",apikey));
+		var fnstw = JSON.parse(httpGet2("https://fortniteapi.io/v1/news?lang="+pvar2+"&type=stw","Authorization",apikey));
+		var fncreative = JSON.parse(httpGet2("https://fortniteapi.io/v1/news?lang="+pvar2+"&type=creative","Authorization",apikey));
+		var fnuser = JSON.parse(httpGet2("https://fortniteapi.io/v1/lookup?username="+pvar1,"Authorization",apikey));
+		if(fnuser.result=true) {
+		var fnmatches= JSON.parse(httpGet2("https://fortniteapi.io/v1/matches?account="+fnuser.account_id,"Authorization",apikey));
+		var fnstats= JSON.parse(httpGet2("https://fortniteapi.io/v1/stats?account="+fnuser.account_id,"Authorization",apikey));
+                }
+		var fnshop= JSON.parse(httpGet2("https://fortniteapi.io/v2/shop?lang="+pvar2,"Authorization",apikey));
+		var fnchallenges = JSON.parse(httpGet2("https://fortniteapi.io/v2/challenges?season=current&lang"+pvar2,"Authorization",apikey));
+    
+    // BR news ==================================================================================================================
+    document.write("<h2>Battle Royale News</h2><br>");
+    for(i=0;i<fnbr.news.length;i++) {
+     document.write("<h3>"+fnbr.news[i].title+"</h3><h4>"+fnbr.news[i].tabTitle+"</h4>");
+      document.write("adspace: "+fnbr.news[i].adspace+"<br>");
+      document.write("id: "+fnbr.news[i].id+"<br>");
+      document.write("date: "+fnbr.news[i].date+"<br>");
+      document.write("image: "+'<img src="'+fnbr.news[i].image+'" alt="news image"><br>');
+      document.write("body: "+fnbr.news[i].body+"<br>");
+      document.write("<br>");
+      
+      
+    }
+ // STW news ==================================================================================================================
+    document.write("<h2>Save The World News</h2><br>");
+    for(i=0;i<fnstw.news.length;i++) {
+     document.write("<h3>"+fnstw.news[i].title+"</h3><h4>"+fnstw.news[i].tabTitle+"</h4>");
+      document.write("adspace: "+fnstw.news[i].adspace+"<br>");
+      document.write("id: "+fnstw.news[i].id+"<br>");
+      document.write("date: "+fnstw.news[i].date+"<br>");
+      document.write("image: "+'<img src="'+fnstw.news[i].image+'" alt="news image"><br>');
+      document.write("body: "+fnstw.news[i].body+"<br>");
+      document.write("<br>");
+      
+      
+    }
+		
+		 // Creative news ==================================================================================================================
+    document.write("<h2>Creative News</h2><br>");
+    for(i=0;i<fncreative.news.length;i++) {
+     document.write("<h3>"+fncreative.news[i].title+"</h3><h4>"+fncreative.news[i].tabTitle+"</h4>");
+      document.write("adspace: "+fncreative.news[i].adspace+"<br>");
+      document.write("id: "+fncreative.news[i].id+"<br>");
+      document.write("date: "+fncreative.news[i].date+"<br>");
+      document.write("image: "+'<img src="'+fncreative.news[i].image+'" alt="news image"><br>');
+      document.write("body: "+fncreative.news[i].body+"<br>");
+      document.write("<br>");
+      
+      
+    }
+		
+		// Map ===============================================================================================================================
+		document.write('<h2>Current map</h2><img src="https://media.fortniteapi.io/images/map.png?showPOI=true" alt="map image"><br>');
+		
+		// Shop ==============================================================================================================================
+		document.write('<h2>Shop</h2>Updated: '+fnshop.lastUpdate.date+'<br>');
+		for(i=0;i<fnshop.shop.length;i++) {
+			document.write("<h3>"+fnshop.shop[i].displayName+"</h3>");
+			document.write("displayDescription: "+fnshop.shop[i].displayDescription+"<br>");
+			document.write("first released: "+fnshop.shop[i].firstReleaseDate+", previously released: "+fnshop.shop[i].previousReleaseDate+"<br>");
+			document.write("regular price: "+fnshop.shop[i].price.regularPrice+", final price: "+fnshop.shop[i].price.finalPrice+"<br>");
+			
+			document.write("displayAssets: <br>");
+			for(j=0;j<fnshop.shop[i].displayAssets.length;j++) {
+				document.write('<img src="'+fnshop.shop[i].displayAssets[j].full_background+'" width=300 alt="asset image">');
+			}
+			document.write("<br><br>granted: <br>");
+			for(k=0;k<fnshop.shop[i].granted.length;k++) {
+				document.write("<h4>"+fnshop.shop[i].granted[k].name+"</h4>");
+				document.write("description: "+fnshop.shop[i].granted[k].description+"<br>");
+				document.write("series: "+fnshop.shop[i].granted[k].series+"<br>");
+				document.write('<img src="'+fnshop.shop[i].granted[k].images.full_background+'" width=200 alt="granted image"><br>');
+			}
+			
+		}
+    
+    
+    
+  </script>
+  </body>
+</html>
