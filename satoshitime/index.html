@@ -7,7 +7,7 @@
       let socket = new WebSocket("wss://ws.blockchain.info/inv");
 
       socket.onopen = function(e) {
-        colsole.log("Connection established");
+        console.log("Connection established");
         socket.send('{"op": "blocks_sub"}');
       };
 
