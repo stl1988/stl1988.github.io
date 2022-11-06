@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+  <head>
+    <script>
+      // Websocket connection
+      
+      let socket = new WebSocket("wss://ws.blockchain.info/inv");
+
+      socket.onopen = function(e) {
+        colsole.log("Connection established");
+        socket.send('{"op": "blocks_sub"}');
+      };
+
+      socket.onmessage = function(event) {
+        console.log(event.data);
+        var btcblock = JSON.parse(event.data);
+        console.log(btcblock.height);
+        document.getElementById('blockheight').value=btcblock.height;
+      };
+
+      socket.onclose = function(event) {
+        console.log("Connection closed");
+      };
+
+      socket.onerror = function(error) {
+        alert(`An error occoured: [error]`);
+      };
+      
+      
+    </script>
+  </head>
+  <body>
+    <div id="blockheight">Please wait...</div>
+    
+  </body>
+</html>
