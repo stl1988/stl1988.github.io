@@ -53,50 +53,14 @@
 		var fnshop= JSON.parse(httpGet2("https://fortniteapi.io/v2/shop?lang="+pvar2,"Authorization",apikey));
 		var fnchallenges = JSON.parse(httpGet2("https://fortniteapi.io/v2/challenges?season=current&lang"+pvar2,"Authorization",apikey));
     
-    // BR news ==================================================================================================================
-    document.write("<h2>Battle Royale News</h2><br>");
-    for(i=0;i<fnbr.news.length;i++) {
-     document.write("<h3>"+fnbr.news[i].title+"</h3><h4>"+fnbr.news[i].tabTitle+"</h4>");
-      document.write("adspace: "+fnbr.news[i].adspace+"<br>");
-      document.write("id: "+fnbr.news[i].id+"<br>");
-      document.write("date: "+fnbr.news[i].date+"<br>");
-      document.write("image: "+'<img src="'+fnbr.news[i].image+'" alt="news image"><br>');
-      document.write("body: "+fnbr.news[i].body+"<br>");
-      document.write("<br>");
+    
       
       
-    }
- // STW news ==================================================================================================================
-    document.write("<h2>Save The World News</h2><br>");
-    for(i=0;i<fnstw.news.length;i++) {
-     document.write("<h3>"+fnstw.news[i].title+"</h3><h4>"+fnstw.news[i].tabTitle+"</h4>");
-      document.write("adspace: "+fnstw.news[i].adspace+"<br>");
-      document.write("id: "+fnstw.news[i].id+"<br>");
-      document.write("date: "+fnstw.news[i].date+"<br>");
-      document.write("image: "+'<img src="'+fnstw.news[i].image+'" alt="news image"><br>');
-      document.write("body: "+fnstw.news[i].body+"<br>");
-      document.write("<br>");
-      
-      
-    }
-		
-		 // Creative news ==================================================================================================================
-    document.write("<h2>Creative News</h2><br>");
-    for(i=0;i<fncreative.news.length;i++) {
-     document.write("<h3>"+fncreative.news[i].title+"</h3><h4>"+fncreative.news[i].tabTitle+"</h4>");
-      document.write("adspace: "+fncreative.news[i].adspace+"<br>");
-      document.write("id: "+fncreative.news[i].id+"<br>");
-      document.write("date: "+fncreative.news[i].date+"<br>");
-      document.write("image: "+'<img src="'+fncreative.news[i].image+'" alt="news image"><br>');
-      document.write("body: "+fncreative.news[i].body+"<br>");
-      document.write("<br>");
-      
-      
-    }
+    
 		
 		// Map ===============================================================================================================================
 		document.write('<h2>Current map</h2><img src="https://media.fortniteapi.io/images/map.png?showPOI=true" alt="map image"><br>');
-		
+		document.write('<div style="break-after:page"></div>');
 		// Shop ==============================================================================================================================
 		document.write('<h2>Shop</h2>Updated: '+fnshop.lastUpdate.date+'<br>');
 		for(i=0;i<fnshop.shop.length;i++) {
