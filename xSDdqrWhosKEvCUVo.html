@@ -1,0 +1,716 @@
+<html><head><base href="https://websim.ai"><title>NostrJS: A Universal Nostr Client</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f0f0f0;
+        color: #333;
+    }
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    h1, h2 {
+        color: #1a5f7a;
+        text-align: center;
+    }
+    #eventFeed {
+        margin-top: 20px;
+        max-height: 500px;
+        overflow-y: auto;
+    }
+    .event {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+    }
+    .event-header {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    .event-content {
+        white-space: pre-wrap;
+        margin-bottom: 10px;
+    }
+    .event-metadata, .event-tags, .event-pubkeys, .event-id, .event-relays, .event-signature {
+        font-size: 0.8em;
+        color: #666;
+        margin-top: 5px;
+    }
+    .event-tags, .event-pubkeys, .event-relays, .event-signature {
+        margin-top: 10px;
+    }
+    .tag, .relay {
+        display: inline-block;
+        background-color: #e0e0e0;
+        padding: 2px 5px;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        border-radius: 3px;
+    }
+    input[type="text"], input[type="password"], select, textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    button {
+        background-color: #1a5f7a;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
+    button:hover {
+        background-color: #134b61;
+    }
+    #relayList, #pubkeyList {
+        margin-bottom: 10px;
+        max-height: 150px;
+        overflow-y: auto;
+    }
+    .relay-item, .pubkey-item {
+        display: inline-block;
+        background-color: #e0e0e0;
+        padding: 5px 10px;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        border-radius: 3px;
+    }
+    .remove-button {
+        margin-left: 5px;
+        cursor: pointer;
+        color: #ff4444;
+    }
+    #userPubkey {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    .paused {
+        background-color: #ff4444;
+    }
+    #connectionStatus {
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 4px;
+        font-weight: bold;
+    }
+    .connected {
+        background-color: #d4edda;
+        color: #155724;
+    }
+    .disconnected {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+    #relayFeedback, #postFeedback {
+        margin-top: 10px;
+        font-size: 0.9em;
+    }
+    .success {
+        color: #155724;
+    }
+    .error {
+        color: #721c24;
+    }
+    #postEvent {
+        margin-top: 20px;
+        border-top: 1px solid #ddd;
+        padding-top: 20px;
+    }
+    #extensionStatus {
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 4px;
+        font-weight: bold;
+    }
+    .extension-found {
+        background-color: #d4edda;
+        color: #155724;
+    }
+    .extension-not-found {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>NostrJS: A Universal Nostr Client</h1>
+    <p>Connect to multiple Nostr relays and view events, sorted from newest to oldest.</p>
+    
+    <h2>Your Pubkey (Optional)</h2>
+    <input type="text" id="userPubkeyInput" placeholder="Enter your pubkey (npub or hex)">
+    <button id="setUserPubkeyButton">Set User Pubkey</button>
+    <div id="userPubkey"></div>
+    <div id="relayFeedback"></div>
+    
+    <h2>Relays</h2>
+    <input type="text" id="relayInput" placeholder="Enter relay URL (e.g., wss://relay.damus.io)">
+    <button id="addRelayButton">Add Relay</button>
+    <div id="relayList"></div>
+    <button id="connectButton">Connect to Relays</button>
+    <div id="connectionStatus"></div>
+    
+    <h2>Filters</h2>
+    <input type="text" id="pubkeyFilterInput" placeholder="Enter pubkey to filter (npub or hex)">
+    <button id="addPubkeyFilterButton">Add Pubkey Filter</button>
+    <div id="pubkeyList"></div>
+    
+    <h2>Event Feed</h2>
+    <select id="fetchMode">
+        <option value="all">All Pubkeys</option>
+        <option value="filtered">Filtered Pubkeys</option>
+        <option value="followed">Followed Pubkeys</option>
+    </select>
+    <button id="fetchEventsButton">Fetch Events</button>
+    <button id="pauseResumeButton">Pause</button>
+    <div id="eventFeed"></div>
+
+    <div id="postEvent">
+        <h2>Post New Event</h2>
+        <div id="extensionStatus"></div>
+        <select id="eventKind">
+            <option value="1">Text Note</option>
+            <option value="0">Metadata</option>
+            <option value="3">Contacts</option>
+            <option value="7">Reaction</option>
+        </select>
+        <textarea id="eventContent" rows="4" placeholder="Enter event content"></textarea>
+        <input type="text" id="eventTags" placeholder="Enter tags (comma-separated, e.g. p:pubkey,e:event_id)">
+        <button id="postEventButton">Post Event</button>
+        <div id="postFeedback"></div>
+    </div>
+</div>
+
+<script>
+    const userPubkeyInput = document.getElementById('userPubkeyInput');
+    const setUserPubkeyButton = document.getElementById('setUserPubkeyButton');
+    const userPubkeyDisplay = document.getElementById('userPubkey');
+    const relayInput = document.getElementById('relayInput');
+    const addRelayButton = document.getElementById('addRelayButton');
+    const connectButton = document.getElementById('connectButton');
+    const pubkeyFilterInput = document.getElementById('pubkeyFilterInput');
+    const addPubkeyFilterButton = document.getElementById('addPubkeyFilterButton');
+    const fetchModeSelect = document.getElementById('fetchMode');
+    const fetchEventsButton = document.getElementById('fetchEventsButton');
+    const pauseResumeButton = document.getElementById('pauseResumeButton');
+    const relayList = document.getElementById('relayList');
+    const pubkeyList = document.getElementById('pubkeyList');
+    const eventFeed = document.getElementById('eventFeed');
+    const connectionStatus = document.getElementById('connectionStatus');
+    const relayFeedback = document.getElementById('relayFeedback');
+    const eventKindSelect = document.getElementById('eventKind');
+    const eventContentTextarea = document.getElementById('eventContent');
+    const eventTagsInput = document.getElementById('eventTags');
+    const postEventButton = document.getElementById('postEventButton');
+    const postFeedback = document.getElementById('postFeedback');
+    const extensionStatus = document.getElementById('extensionStatus');
+    
+    let sockets = {};
+    let userPubkey = null;
+    let events = new Map();
+    let relays = new Set();
+    let pubkeyFilters = new Set();
+    let followedPubkeys = new Set();
+    const MAX_EVENTS = 30;
+    let isPaused = false;
+
+    setUserPubkeyButton.addEventListener('click', setUserPubkey);
+    addRelayButton.addEventListener('click', addRelay);
+    connectButton.addEventListener('click', connectToRelays);
+    addPubkeyFilterButton.addEventListener('click', addPubkeyFilter);
+    fetchEventsButton.addEventListener('click', fetchEvents);
+    pauseResumeButton.addEventListener('click', togglePauseResume);
+    postEventButton.addEventListener('click', postEvent);
+
+    // Check for NIP-07 extension
+    function checkForExtension() {
+        if (typeof window.nostr !== 'undefined') {
+            extensionStatus.textContent = 'NIP-07 extension found!';
+            extensionStatus.className = 'extension-found';
+        } else {
+            extensionStatus.textContent = 'NIP-07 extension not found. Please install a Nostr signer extension.';
+            extensionStatus.className = 'extension-not-found';
+        }
+    }
+
+    // Run the check when the page loads
+    window.addEventListener('load', checkForExtension);
+
+    // Recheck for the extension every 5 seconds
+    setInterval(checkForExtension, 5000);
+
+    function setUserPubkey() {
+        const input = userPubkeyInput.value.trim();
+        if (!input) return;
+        
+        userPubkey = convertToHexPubkey(input);
+        userPubkeyDisplay.innerHTML = `
+            <strong>Your Hex Pubkey:</strong> ${userPubkey}<br>
+            <strong>Your Npub:</strong> ${hexToNpub(userPubkey)}
+        `;
+        userPubkeyInput.value = '';
+        fetchFollowList();
+        fetchUserRelays();
+    }
+
+    function fetchFollowList() {
+        if (!userPubkey) return;
+
+        Object.values(sockets).forEach(socket => {
+            if (socket.readyState === WebSocket.OPEN) {
+                const followListRequest = JSON.stringify([
+                    "REQ",
+                    "follow-list",
+                    {
+                        authors: [userPubkey],
+                        kinds: [3]
+                    }
+                ]);
+                socket.send(followListRequest);
+            }
+        });
+    }
+
+    function fetchUserRelays() {
+        if (!userPubkey) return;
+
+        const initialRelays = ['wss://relay.damus.io', 'wss://nos.lol', 'wss://relay.nostr.band'];
+        initialRelays.forEach(relay => {
+            if (!relays.has(relay)) {
+                addRelayToList(relay);
+                connectToRelay(relay);
+            }
+        });
+
+        Object.values(sockets).forEach(socket => {
+            if (socket.readyState === WebSocket.OPEN) {
+                const relayListRequest = JSON.stringify([
+                    "REQ",
+                    "user-relays",
+                    {
+                        authors: [userPubkey],
+                        kinds: [2, 10002]
+                    }
+                ]);
+                socket.send(relayListRequest);
+            }
+        });
+    }
+
+    function addRelay() {
+        const relayUrl = relayInput.value.trim();
+        if (!relayUrl) return;
+        
+        addRelayToList(relayUrl);
+        relayInput.value = '';
+    }
+
+    function addRelayToList(relayUrl) {
+        if (relays.has(relayUrl)) return;
+        relays.add(relayUrl);
+
+        const relayItem = document.createElement('span');
+        relayItem.className = 'relay-item';
+        relayItem.textContent = relayUrl;
+        relayItem.innerHTML += ' <span class="remove-button" onclick="removeRelay(this)">✖</span>';
+        relayList.appendChild(relayItem);
+    }
+
+    function removeRelay(button) {
+        const relayItem = button.parentElement;
+        const relayUrl = relayItem.textContent.trim().slice(0, -1);
+        relayList.removeChild(relayItem);
+        relays.delete(relayUrl);
+        if (sockets[relayUrl]) {
+            sockets[relayUrl].close();
+            delete sockets[relayUrl];
+        }
+        updateConnectionStatus();
+    }
+
+    function connectToRelays() {
+        relays.forEach(connectToRelay);
+    }
+
+    function connectToRelay(relayUrl) {
+        if (sockets[relayUrl]) return;
+
+        try {
+            const socket = new WebSocket(relayUrl);
+            sockets[relayUrl] = socket;
+            
+            socket.onopen = () => {
+                console.log(`Connected to ${relayUrl}`);
+                updateConnectionStatus();
+                if (userPubkey) {
+                    fetchFollowList();
+                    fetchUserRelays();
+                }
+                addRelayFeedback(relayUrl, true);
+            };
+            
+            socket.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                if (data[0] === 'EVENT') {
+                    if (data[2].kind === 3 && data[2].pubkey === userPubkey) {
+                        processFollowList(data[2]);
+                    } else if ((data[2].kind === 2 || data[2].kind === 10002) && data[2].pubkey === userPubkey) {
+                        processUserRelays(data[2]);
+                    } else {
+                        processEvent(data[2], relayUrl);
+                    }
+                }
+            };
+
+            socket.onerror = (error) => {
+                console.error(`WebSocket error for ${relayUrl}:`, error);
+                updateConnectionStatus();
+                addRelayFeedback(relayUrl, false);
+            };
+
+            socket.onclose = () => {
+                console.log(`Disconnected from ${relayUrl}`);
+                delete sockets[relayUrl];
+                updateConnectionStatus();
+                addRelayFeedback(relayUrl, false);
+            };
+
+        } catch (error) {
+            console.error(`Failed to connect to ${relayUrl}:`, error);
+            updateConnectionStatus();
+            addRelayFeedback(relayUrl, false);
+        }
+    }
+
+    function addRelayFeedback(relayUrl, success) {
+        const feedbackElement = document.createElement('div');
+        feedbackElement.className = success ? 'success' : 'error';
+        feedbackElement.textContent = `${success ? 'Successfully connected to' : 'Failed to connect to'} ${relayUrl}`;
+        relayFeedback.appendChild(feedbackElement);
+        setTimeout(() => relayFeedback.removeChild(feedbackElement), 5000);
+    }
+
+    function updateConnectionStatus() {
+        const connectedRelays = Object.values(sockets).filter(socket => socket.readyState === WebSocket.OPEN).length;
+        const totalRelays = relays.size;
+
+        if (connectedRelays === 0) {
+            connectionStatus.textContent = 'Not connected to any relays';
+            connectionStatus.className = 'disconnected';
+        } else if (connectedRelays === totalRelays) {
+            connectionStatus.textContent = `Connected to all relays (${connectedRelays}/${totalRelays})`;
+            connectionStatus.className = 'connected';
+        } else {
+            connectionStatus.textContent = `Connected to ${connectedRelays}/${totalRelays} relays`;
+            connectionStatus.className = 'connected';
+        }
+    }
+
+    function processFollowList(event) {
+        followedPubkeys.clear();
+        event.tags.forEach(tag => {
+            if (tag[0] === 'p') {
+                followedPubkeys.add(tag[1]);
+            }
+        });
+        console.log('Fetched follow list:', followedPubkeys);
+    }
+
+    function processUserRelays(event) {
+        let userRelays = [];
+        if (event.kind === 2) {
+            userRelays = JSON.parse(event.content);
+        } else if (event.kind === 10002) {
+            event.tags.forEach(tag => {
+                if (tag[0] === 'r') {
+                    userRelays.push(tag[1]);
+                }
+            });
+        }
+        
+        userRelays.forEach(relay => {
+            if (!relays.has(relay)) {
+                addRelayToList(relay);
+                connectToRelay(relay);
+            }
+        });
+    }
+
+    function addPubkeyFilter() {
+        const pubkey = convertToHexPubkey(pubkeyFilterInput.value.trim());
+        if (!pubkey) return;
+
+        if (pubkeyFilters.has(pubkey)) return;
+        pubkeyFilters.add(pubkey);
+
+        const pubkeyItem = document.createElement('span');
+        pubkeyItem.className = 'pubkey-item';
+        pubkeyItem.textContent = hexToNpub(pubkey);
+        pubkeyItem.innerHTML += ' <span class="remove-button" onclick="removePubkeyFilter(this)">✖</span>';
+        pubkeyList.appendChild(pubkeyItem);
+
+        pubkeyFilterInput.value = '';
+    }
+
+    function removePubkeyFilter(button) {
+        const pubkeyItem = button.parentElement;
+        const npub = pubkeyItem.textContent.trim().slice(0, -1);
+        const hexPubkey = convertToHexPubkey(npub);
+        pubkeyList.removeChild(pubkeyItem);
+        pubkeyFilters.delete(hexPubkey);
+    }
+
+    function fetchEvents() {
+        events.clear();
+        eventFeed.innerHTML = '';
+        isPaused = false;
+        pauseResumeButton.textContent = 'Pause';
+        pauseResumeButton.classList.remove('paused');
+
+        let filter = {};
+        const fetchMode = fetchModeSelect.value;
+
+        if (fetchMode === 'followed' && userPubkey && followedPubkeys.size > 0) {
+            filter = { authors: Array.from(followedPubkeys) };
+        } else if (fetchMode === 'filtered' && pubkeyFilters.size > 0) {
+            filter = { authors: Array.from(pubkeyFilters) };
+        }
+
+        Object.values(sockets).forEach(socket => {
+            if (socket.readyState === WebSocket.OPEN) {
+                const subscriptionMessage = JSON.stringify([
+                    "REQ",
+                    "event-sub",
+                    {
+                        ...filter,
+                        kinds: [0,1,2,3,4,5,6,7,40,41,42,43,44,45,46,47,48,49,50]
+                    }
+                ]);
+                socket.send(subscriptionMessage);
+            }
+        });
+    }
+
+    function togglePauseResume() {
+        isPaused = !isPaused;
+        if (isPaused) {
+            pauseResumeButton.textContent = 'Resume';
+            pauseResumeButton.classList.add('paused');
+        } else {
+            pauseResumeButton.textContent = 'Pause';
+            pauseResumeButton.classList.remove('paused');
+        }
+    }
+
+    function convertToHexPubkey(pubkey) {
+        if (pubkey.startsWith('npub1')) {
+            return bech32ToHex(pubkey);
+        }
+        return pubkey;
+    }
+
+    function bech32ToHex(npub) {
+        const charset = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l';
+        const data = npub.toLowerCase().slice(5);
+        let result = '';
+        for (let i = 0; i < data.length; i += 8) {
+            const chunk = data.slice(i, i + 8);
+            let value = 0;
+            for (let j = 0; j < chunk.length; j++) {
+                value = value * 32 + charset.indexOf(chunk[j]);
+            }
+            result += value.toString(16).padStart(10, '0');
+        }
+        return result.slice(0, 64);
+    }
+
+    function hexToNpub(hex) {
+        const charset = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l';
+        let result = 'npub1';
+        for (let i = 0; i < hex.length; i += 10) {
+            const chunk = parseInt(hex.slice(i, i + 10), 16);
+            for (let j = 0; j < 8; j++) {
+                result += charset[chunk >> (5 * (7 - j)) & 31];
+            }
+        }
+        return result;
+    }
+
+    function processEvent(event, relayUrl) {
+        if (isPaused) return;
+        
+        const fetchMode = fetchModeSelect.value;
+        if (fetchMode === 'followed' && userPubkey && followedPubkeys.size > 0 && !followedPubkeys.has(event.pubkey)) return;
+        if (fetchMode === 'filtered' && pubkeyFilters.size > 0 && !pubkeyFilters.has(event.pubkey)) return;
+        
+        if (events.has(event.id)) {
+            const existingEvent = events.get(event.id);
+            if (!existingEvent.relays.includes(relayUrl)) {
+                existingEvent.relays.push(relayUrl);
+            }
+        } else {
+            events.set(event.id, {...event, relays: [relayUrl]});
+        }
+        
+        const sortedEvents = Array.from(events.values()).sort((a, b) => b.created_at - a.created_at);
+        
+        if (sortedEvents.length > MAX_EVENTS) {
+            const eventsToRemove = sortedEvents.slice(MAX_EVENTS);
+            eventsToRemove.forEach(event => events.delete(event.id));
+        }
+        
+        redrawEvents(sortedEvents.slice(0, MAX_EVENTS));
+    }
+
+    function redrawEvents(sortedEvents) {
+        eventFeed.innerHTML = '';
+        
+        sortedEvents.forEach(event => {
+            const eventElement = document.createElement('div');
+            eventElement.className = 'event';
+            
+            const header = document.createElement('div');
+            header.className = 'event-header';
+            header.textContent = `Event Kind: ${event.kind}`;
+            eventElement.appendChild(header);
+
+            const content = document.createElement('div');
+            content.className = 'event-content';
+            content.textContent = event.content;
+            eventElement.appendChild(content);
+
+            const metadata = document.createElement('div');
+            metadata.className = 'event-metadata';
+            metadata.textContent = `Created at: ${new Date(event.created_at * 1000).toLocaleString()}`;
+            eventElement.appendChild(metadata);
+
+            const pubkeys = document.createElement('div');
+            pubkeys.className = 'event-pubkeys';
+            pubkeys.innerHTML = `
+                <strong>Hex Pubkey:</strong> ${event.pubkey}<br>
+                <strong>Npub:</strong> ${hexToNpub(event.pubkey)}
+            `;
+            eventElement.appendChild(pubkeys);
+
+            const eventId = document.createElement('div');
+            eventId.className = 'event-id';
+            eventId.innerHTML = `<strong>Event ID:</strong> ${event.id}`;
+            eventElement.appendChild(eventId);
+
+            if (event.sig) {
+                const signature = document.createElement('div');
+                signature.className = 'event-signature';
+                signature.innerHTML = `<strong>Signature:</strong> ${event.sig}`;
+                eventElement.appendChild(signature);
+            }
+
+            const relays = document.createElement('div');
+            relays.className = 'event-relays';
+            relays.innerHTML = '<strong>Relays:</strong> ';
+            event.relays.forEach(relay => {
+                const relaySpan = document.createElement('span');
+                relaySpan.className = 'relay';
+                relaySpan.textContent = relay;
+                relays.appendChild(relaySpan);
+            });
+            eventElement.appendChild(relays);
+
+            if (event.tags && event.tags.length > 0) {
+                const tagsContainer = document.createElement('div');
+                tagsContainer.className = 'event-tags';
+                tagsContainer.textContent = 'Tags: ';
+                event.tags.forEach(tag => {
+                    const tagElement = document.createElement('span');
+                    tagElement.className = 'tag';
+                    tagElement.textContent = `${tag[0]}: ${tag[1]}`;
+                    tagsContainer.appendChild(tagElement);
+                });
+                eventElement.appendChild(tagsContainer);
+            }
+
+            eventFeed.appendChild(eventElement);
+        });
+    }
+
+    async function postEvent() {
+        if (typeof window.nostr === 'undefined') {
+            addPostFeedback('NIP-07 extension not found. Please install a Nostr signer extension.', false);
+            return;
+        }
+
+        const kind = parseInt(eventKindSelect.value);
+        const content = eventContentTextarea.value;
+        const tags = parseTags(eventTagsInput.value);
+
+        try {
+            const pubkey = await window.nostr.getPublicKey();
+            const event = {
+                kind: kind,
+                created_at: Math.floor(Date.now() / 1000),
+                tags: tags,
+                content: content,
+                pubkey: pubkey
+            };
+
+            event.id = await window.nostr.signEvent(event);
+            const signedEvent = await window.nostr.signEvent(event);
+
+            let successCount = 0;
+            let failCount = 0;
+
+            for (const [relayUrl, socket] of Object.entries(sockets)) {
+                if (socket.readyState === WebSocket.OPEN) {
+                    try {
+                        const publishMessage = JSON.stringify(["EVENT", signedEvent]);
+                        socket.send(publishMessage);
+                        successCount++;
+                    } catch (error) {
+                        console.error(`Failed to publish event to ${relayUrl}:`, error);
+                        failCount++;
+                    }
+                } else {
+                    failCount++;
+                }
+            }
+
+            addPostFeedback(`Event posted successfully to ${successCount} relay(s). Failed on ${failCount} relay(s).`, successCount > 0);
+
+            // Clear input fields after successful post
+            eventContentTextarea.value = '';
+            eventTagsInput.value = '';
+
+        } catch (error) {
+            console.error('Error posting event:', error);
+            addPostFeedback('Error posting event: ' + error.message, false);
+        }
+    }
+
+    function parseTags(tagsString) {
+        return tagsString.split(',').map(tag => {
+            const [key, value] = tag.trim().split(':');
+            return [key, value];
+        }).filter(tag => tag.length === 2);
+    }
+
+    function addPostFeedback(message, success) {
+        const feedbackElement = document.createElement('div');
+        feedbackElement.className = success ? 'success' : 'error';
+        feedbackElement.textContent = message;
+        postFeedback.appendChild(feedbackElement);
+        setTimeout(() => postFeedback.removeChild(feedbackElement), 5000);
+    }
+</script>
+</body></html>
