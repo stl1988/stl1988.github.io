@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Toy‑Language‑Model 2 – 4‑Parameter‑N‑Gram‑Netz</title>
+<style>
+  body{font-family:sans-serif;max-width:840px;margin:20px auto;padding:0 14px;line-height:1.5;}
+  section{margin-bottom:28px;}
+  textarea{width:100%;min-height:76px;}
+  pre{background:#f6f8fa;border:1px solid #d0d0d0;padding:14px;white-space:pre-wrap;word-wrap:break-word;max-height:280px;overflow:auto;}
+  button,input[type="number"]{margin-top:6px;padding:6px 12px;border:1px solid #555;border-radius:6px;background:#eee;cursor:pointer;}
+  button:hover{background:#e5e5e5;}
+  .param{display:inline-block;width:110px;margin:0 6px 6px 0;}
+</style>
+</head>
+<body>
+<h1>Toy‑Language‑Model 2 – echtes Text‑Sampling mit 4 Gewichten</h1>
+<p>Version 2 mischt <strong>Unigram‑, Bigram‑ und Trigram‑Vorhersagen</strong> sowie reinen Zufall. Die vier Gewichte w<sub>0</sub>…w<sub>3</sub> bestimmen, wie stark die jeweilige Komponente zur Wahrscheinlichkeitsverteilung für den nächsten Buchstaben beiträgt (w<sub>3</sub> = reiner Zufall). Ein untrainiertes Modell besitzt reine Uniformverteilung &rarr; Kauderwelsch. Über Trainings­texte werden N‑Gramm‑Statistiken aufgebaut und die Gewichte schrittweise mit einem simplen <em>Hebbian‑artigen</em> Update angepasst.</p>
+
+<section>
+  <h2>Prompt eingeben</h2>
+  <textarea id="promptIn" placeholder="Schreibe hier deinen Prompt …"></textarea><br>
+  Länge der Antwort (in Zeichen): <input type="number" id="genLen" value="120" min="1" max="500">
+  <button id="generateBtn">Antwort generieren</button>
+  <h3>Antwort</h3>
+  <pre id="answerOut"></pre>
+</section>
+
+<section>
+  <h2>Trainingsdaten hinzufügen</h2>
+  <textarea id="trainText" placeholder="Beliebiger Trainings­text (wird zum Korpus hinzugefügt)"></textarea><br>
+  <button id="addTrainBtn">Hinzufügen &amp; trainieren</button>
+</section>
+
+<section>
+  <h2>Aktuelle Parameter</h2>
+  <div id="params"></div>
+</section>
+
+<section>
+  <h2>Protokoll</h2>
+  <pre id="log"></pre>
+</section>
+
+<script>
+/* =====================
+   Basis‑Strukturen
+   ===================== */
+const alphabet="abcdefghijklmnopqrstuvwxyz äöüß.,!?";
+
+const model={
+  weights:[0.25,0.25,0.25,0.25],   // w0=Unigram, w1=Bigram, w2=Trigram, w3=Random
+  lr:0.05,
+  uni:Object.create(null),         // 1‑Gramm‑Zähler
+  bi:Object.create(null),          // 2‑Gramm
+  tri:Object.create(null)          // 3‑Gramm
+};
+
+function showParams(){
+  const wrap=w=>w.toFixed(4);
+  document.getElementById("params").innerHTML=model.weights
+     .map((w,i)=>`<span class="param">w${i}: ${wrap(w)}</span>`).join("");
+}
+
+function addLog(msg){
+  const l=document.getElementById("log");
+  l.textContent+=msg+"\n";
+  l.scrollTop=l.scrollHeight;
+}
+
+/* =====================
+   N‑Gram‑Zählungen
+   ===================== */
+function updateNgrams(text){
+  text=text.toLowerCase();
+  for(let i=0;i<text.length;i++){
+    const c=text[i];
+    if(!alphabet.includes(c)) continue;
+    model.uni[c]=(model.uni[c]||0)+1;
+    const p1=text[i-1];
+    if(p1&&alphabet.includes(p1)){
+      model.bi[p1]=model.bi[p1]||Object.create(null);
+      model.bi[p1][c]=(model.bi[p1][c]||0)+1;
+    }
+    const p2=text[i-2];
+    if(p1&&p2&&alphabet.includes(p2)){
+      const key=p2+p1;
+      model.tri[key]=model.tri[key]||Object.create(null);
+      model.tri[key][c]=(model.tri[key][c]||0)+1;
+    }
+  }
+}
+
+/* =====================
+   Training – sehr grob
+   ===================== */
+function train(text){
+  updateNgrams(text);
+  text=text.toLowerCase();
+  // kleines, heuristisches Update der Gewichte basierend darauf,
+  // welche N‑Gramm‑Ebene das nächste Zeichen "richtig" vorhersagt
+  for(let i=2;i<text.length;i++){
+    const c=text[i]; if(!alphabet.includes(c)) continue;
+    const uProb=(model.uni[c]||0)+1;
+    const bProb=((model.bi[text[i-1]]||{})[c]||0)+1;
+    const key=text[i-2]+text[i-1];
+    const tProb=((model.tri[key]||{})[c]||0)+1;
+    const probs=[uProb,bProb,tProb,1];
+    const maxIdx=probs.indexOf(Math.max(...probs));
+    for(let j=0;j<4;j++){
+      if(j===maxIdx) model.weights[j]+=model.lr*(1-model.weights[j]);
+      else            model.weights[j]-=model.lr*model.weights[j]*0.4;
+    }
+    renormWeights();
+  }
+  addLog(`Trainiert mit ${text.length} Zeichen.`);
+  showParams();
+}
+
+function renormWeights(){
+  const s=model.weights.reduce((a,b)=>a+b,0);
+  for(let i=0;i<4;i++) model.weights[i]/=s;
+}
+
+/* =====================
+   Wahrscheinlichkeits‑Helpers
+   ===================== */
+function nextCharDist(context){
+  const [p2,p1]=[context.slice(-2,-1),context.slice(-1)];
+  const dist=Object.create(null);
+  for(const ch of alphabet){
+    const u  =(model.uni[ch]||0)+1;                   // +1 Glättung
+    const b  =p1?((model.bi[p1]||{})[ch]||0)+1:0;
+    const key=p2+p1;
+    const t  =(p2?((model.tri[key]||{})[ch]||0)+1:0);
+    const mix=model.weights[0]*u + model.weights[1]*b + model.weights[2]*t + model.weights[3]*1;
+    dist[ch]=mix;
+  }
+  return dist;
+}
+
+function sampleChar(dist){
+  const sum=Object.values(dist).reduce((a,b)=>a+b,0);
+  let r=Math.random()*sum;
+  for(const ch of alphabet){
+    r-=dist[ch]; if(r<=0) return ch;
+  }
+  return alphabet[Math.floor(Math.random()*alphabet.length)];
+}
+
+/* =====================
+   Generierung
+   ===================== */
+function generate(prompt,len){
+  let text=prompt.toLowerCase();
+  addLog(`--- Generierung startet (len=${len}) ---`);
+  for(let i=0;i<len;i++){
+    const context=text.slice(-2);
+    const dist=nextCharDist(context);
+    const ch=sampleChar(dist);
+    text+=ch;
+  }
+  addLog("Generierung beendet.");
+  return text.slice(prompt.length);
+}
+
+/* =====================
+   Event‑Wiring
+   ===================== */
+document.getElementById("addTrainBtn").addEventListener("click",()=>{
+  const txt=document.getElementById("trainText").value.trim();
+  if(txt){
+    train(txt);
+    document.getElementById("trainText").value="";
+  }
+});
+
+document.getElementById("generateBtn").addEventListener("click",()=>{
+  const prompt=document.getElementById("promptIn").value;
+  const len=+document.getElementById("genLen").value||100;
+  const out=generate(prompt,len);
+  document.getElementById("answerOut").textContent=out;
+});
+
+// Init
+showParams();
+</script>
+</body>
+</html>
