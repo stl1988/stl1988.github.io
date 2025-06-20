@@ -12,9 +12,9 @@
   </style>
 </head>
 <body>
-  <h1>Nostr-Client Grundgerüst (NIP-01)</h1>
-  <label>Privater Schlüssel (hex):</label>
-  <input id="privKey" placeholder="z.B. 32 Byte Hex" /><label>Relay-URLs (optional, eine URL pro Zeile):</label>
+  <h1>Nostr-Client Grundgerüst (NIP-01 & NIP-19)</h1>
+  <label>Schlüssel (hex priv / nsec / npub):</label>
+  <input id="keyInput" placeholder="z.B. nsec1... oder npub1... oder 32-Byte-Hex" /><label>Relay-URLs (optional, eine URL pro Zeile):</label>
 
   <textarea id="relayUrls" rows="2" placeholder="z.B. wss://relay.example.com"></textarea><button id="connectBtn">Verbinden</button>
 
@@ -23,84 +23,113 @@
   <textarea id="msgContent" rows="3" placeholder="Dein Text hier..."></textarea>
   <button id="sendBtn" disabled>Senden</button>  <!-- nostr-tools einbinden -->  <script src="https://unpkg.com/nostr-tools@1.5.0/dist/nostr-tools.umd.js"></script>  <script>
     (function() {
-      const { Relay, getEventHash, signEvent, utils: { getPublicKey } } = nostrTools;
+      const { Relay, getEventHash, signEvent, utils: { getPublicKey }, nip19 } = nostrTools;
       const defaultRelays = ['wss://nostr.mom', 'wss://nostr.wine'];
       let relays = [];
-      let subscriptions = [];
+      let filters = [];
+      let privHex = null;
+      let pubHex = null;
 
-      const privInput = document.getElementById('privKey');
+      const keyInput = document.getElementById('keyInput');
       const urlsInput = document.getElementById('relayUrls');
       const connectBtn = document.getElementById('connectBtn');
       const eventsDiv = document.getElementById('events');
       const contentInput = document.getElementById('msgContent');
       const sendBtn = document.getElementById('sendBtn');
 
-      connectBtn.addEventListener('click', async () => {
-        const priv = privInput.value.trim();
-        if (!priv) {
-          alert('Bitte privaten Schlüssel angeben.');
-          return;
+      function parseKey(input) {
+        privHex = null;
+        pubHex = null;
+        if (!input) return;
+        const val = input.trim();
+        try {
+          if (val.startsWith('nsec')) {
+            const { type, data } = nip19.decode(val);
+            if (type === 'nsec') {
+              privHex = data;
+              pubHex = getPublicKey(privHex);
+            }
+          } else if (val.startsWith('npub')) {
+            const { type, data } = nip19.decode(val);
+            if (type === 'npub') {
+              pubHex = data;
+            }
+          } else if (/^[0-9a-fA-F]{64}$/.test(val)) {
+            privHex = val;
+            pubHex = getPublicKey(privHex);
+          }
+        } catch (e) {
+          console.warn('Decoding NIP-19 fehlgeschlagen:', e);
         }
+      }
 
-        const input = urlsInput.value
+      async function connectRelays() {
+        // parse key
+        parseKey(keyInput.value);
+        // determine relay URLs
+        const inputUrls = urlsInput.value
           .split('\n')
-          .map(line => line.trim())
-          .filter(line => line);
-        const urls = input.length > 0 ? input : defaultRelays;
+          .map(l => l.trim())
+          .filter(l => l);
+        const urls = inputUrls.length > 0 ? inputUrls : defaultRelays;
+
+        // clear old
+        relays.forEach(r => r.close());
+        relays = [];
+        eventsDiv.innerHTML = '';
 
         try {
-          // (Re)initialisieren
-          relays.forEach(r => r.close());
-          relays = [];
-          subscriptions = [];
-          eventsDiv.innerHTML = '';
-
-          // Mit allen Relays verbinden
+          // connect
           relays = urls.map(u => Relay(u));
           await Promise.all(relays.map(r => r.connect()));
-
           connectBtn.textContent = 'Verbunden';
           connectBtn.disabled = true;
-          sendBtn.disabled = false;
 
-          // Abonnieren aller Events des eigenen Public Keys
-          const pubkey = getPublicKey(priv);
+          // set filters: if pubHex use author filter, else global kind 1
+          filters = pubHex ? [{ authors: [pubHex] }] : [{ kinds: [1] }];
+          // subscribe
           relays.forEach(r => {
-            const sub = r.sub([{ authors: [pubkey] }]);
-            subscriptions.push(sub);
-            r.on('event', (event, subId) => {
-              if (subId !== sub) return;
+            const sub = r.sub(filters);
+            r.on('event', (ev, subId) => {
               const el = document.createElement('div');
               el.className = 'event';
-              el.textContent = `[${new Date(event.created_at * 1000).toLocaleString()}] ${event.content}`;
+              el.textContent = `[${new Date(ev.created_at * 1000).toLocaleString()}] ${ev.content}`;
               eventsDiv.prepend(el);
             });
           });
+
+          // send button
+          sendBtn.disabled = !privHex;
         } catch (e) {
           console.error('Fehler beim Verbinden:', e);
           alert('Verbindung fehlgeschlagen: ' + e.message);
         }
-      });
+      }
+
+      // on user click
+      connectBtn.addEventListener('click', connectRelays);
+      // automatically on load for read-only
+      window.addEventListener('DOMContentLoaded', () => connectRelays());
 
       sendBtn.addEventListener('click', async () => {
-        const priv = privInput.value.trim();
+        if (!privHex) {
+          alert('Senden nur mit privatem Schlüssel (nsec / hex).');
+          return;
+        }
         const content = contentInput.value.trim();
         if (!content) {
           alert('Bitte erst Text eingeben.');
           return;
         }
-        const pubkey = getPublicKey(priv);
         const event = {
           kind: 1,
-          pubkey,
+          pubkey: pubHex,
           created_at: Math.floor(Date.now() / 1000),
           tags: [],
           content,
         };
         event.id = getEventHash(event);
-        event.sig = await signEvent(event, priv);
-
-        // Veröffentlichen auf allen verbundenen Relays
+        event.sig = await signEvent(event, privHex);
         relays.forEach(r => r.publish(event));
         contentInput.value = '';
       });
