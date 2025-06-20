@@ -1,0 +1,109 @@
+<!DOCTYPE html><html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nostr Client Grundgerüst</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    #events { max-height: 400px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; }
+    .event { border-bottom: 1px solid #ddd; padding: 5px; }
+    .event:last-child { border-bottom: none; }
+    input, button, textarea { margin: 5px 0; padding: 5px; width: 100%; box-sizing: border-box; }
+  </style>
+</head>
+<body>
+  <h1>Nostr-Client Grundgerüst (NIP-01)</h1>
+  <label>Privater Schlüssel (hex):</label>
+  <input id="privKey" placeholder="z.B. 32 Byte Hex" /><label>Relay-URLs (optional, eine URL pro Zeile):</label>
+
+  <textarea id="relayUrls" rows="2" placeholder="z.B. wss://relay.example.com"></textarea><button id="connectBtn">Verbinden</button>
+
+  <h2>Abonnierte Events</h2>
+  <div id="events"></div>  <h2>Neue Nachricht senden</h2>
+  <textarea id="msgContent" rows="3" placeholder="Dein Text hier..."></textarea>
+  <button id="sendBtn" disabled>Senden</button>  <!-- nostr-tools einbinden -->  <script src="https://unpkg.com/nostr-tools@1.5.0/dist/nostr-tools.umd.js"></script>  <script>
+    (function() {
+      const { Relay, getEventHash, signEvent, utils: { getPublicKey } } = nostrTools;
+      const defaultRelays = ['wss://nostr.mom', 'wss://nostr.wine'];
+      let relays = [];
+      let subscriptions = [];
+
+      const privInput = document.getElementById('privKey');
+      const urlsInput = document.getElementById('relayUrls');
+      const connectBtn = document.getElementById('connectBtn');
+      const eventsDiv = document.getElementById('events');
+      const contentInput = document.getElementById('msgContent');
+      const sendBtn = document.getElementById('sendBtn');
+
+      connectBtn.addEventListener('click', async () => {
+        const priv = privInput.value.trim();
+        if (!priv) {
+          alert('Bitte privaten Schlüssel angeben.');
+          return;
+        }
+
+        const input = urlsInput.value
+          .split('\n')
+          .map(line => line.trim())
+          .filter(line => line);
+        const urls = input.length > 0 ? input : defaultRelays;
+
+        try {
+          // (Re)initialisieren
+          relays.forEach(r => r.close());
+          relays = [];
+          subscriptions = [];
+          eventsDiv.innerHTML = '';
+
+          // Mit allen Relays verbinden
+          relays = urls.map(u => Relay(u));
+          await Promise.all(relays.map(r => r.connect()));
+
+          connectBtn.textContent = 'Verbunden';
+          connectBtn.disabled = true;
+          sendBtn.disabled = false;
+
+          // Abonnieren aller Events des eigenen Public Keys
+          const pubkey = getPublicKey(priv);
+          relays.forEach(r => {
+            const sub = r.sub([{ authors: [pubkey] }]);
+            subscriptions.push(sub);
+            r.on('event', (event, subId) => {
+              if (subId !== sub) return;
+              const el = document.createElement('div');
+              el.className = 'event';
+              el.textContent = `[${new Date(event.created_at * 1000).toLocaleString()}] ${event.content}`;
+              eventsDiv.prepend(el);
+            });
+          });
+        } catch (e) {
+          console.error('Fehler beim Verbinden:', e);
+          alert('Verbindung fehlgeschlagen: ' + e.message);
+        }
+      });
+
+      sendBtn.addEventListener('click', async () => {
+        const priv = privInput.value.trim();
+        const content = contentInput.value.trim();
+        if (!content) {
+          alert('Bitte erst Text eingeben.');
+          return;
+        }
+        const pubkey = getPublicKey(priv);
+        const event = {
+          kind: 1,
+          pubkey,
+          created_at: Math.floor(Date.now() / 1000),
+          tags: [],
+          content,
+        };
+        event.id = getEventHash(event);
+        event.sig = await signEvent(event, priv);
+
+        // Veröffentlichen auf allen verbundenen Relays
+        relays.forEach(r => r.publish(event));
+        contentInput.value = '';
+      });
+    })();
+  </script></body>
+</html>
